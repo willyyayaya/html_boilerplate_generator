@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HTML 快速模板產生器</title>
+  <style>
+    :root {
+      --primary-color: #4CAF50;
+      --primary-dark: #45a049;
+      --text-color: #333;
+      --bg-color: #f9f9f9;
+      --border-color: #ddd;
+      --highlight-color: #f0fff0;
+    }
+
+    .dark-theme {
+      --primary-color: #66BB6A;
+      --primary-dark: #4CAF50;
+      --text-color: #eee;
+      --bg-color: #222;
+      --border-color: #444;
+      --highlight-color: #2a3a2a;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', Arial, sans-serif;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .theme-switch {
+      display: flex;
+      align-items: center;
+    }
+
+    .theme-switch label {
+      margin: 0 8px;
+      cursor: pointer;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .left-panel {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .right-panel {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    textarea, .preview-container {
+      width: 100%;
+      height: 400px;
+      margin-top: 15px;
+      font-family: monospace;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      background-color: white;
+      color: #333;
+    }
+
+    .preview-container {
+      background-color: white;
+      overflow: auto;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .preview-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--primary-dark);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .panel {
+      margin: 15px 0;
+      border: 1px solid var(--border-color);
+      padding: 15px;
+      border-radius: 5px;
+      background-color: var(--bg-color);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .panel h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: var(--primary-color);
+    }
+
+    .checkbox-item {
+      margin: 8px 0;
+    }
+
+    .input-item {
+      margin: 12px 0;
+    }
+
+    .input-item input, .input-item select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      box-sizing: border-box;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: -1px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      border: 1px solid var(--border-color);
+      border-bottom: none;
+      border-radius: 5px 5px 0 0;
+      cursor: pointer;
+      background-color: var(--bg-color);
+      margin-right: 5px;
+    }
+
+    .tab.active {
+      background-color: var(--highlight-color);
+      border-bottom: 1px solid var(--highlight-color);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 0 5px 5px 5px;
+      background-color: var(--highlight-color);
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* 修复预览和代码标签页样式 */
+    #code.tab-content, #preview.tab-content {
+      padding: 0;
+      border: none;
+      background-color: transparent;
+    }
+    
+    #code.tab-content textarea, 
+    #preview.tab-content .preview-container {
+      margin-top: 0;
+    }
+    
+    .right-panel .tabs {
+      margin-bottom: 10px;
+    }
+    
+    .right-panel .tab-content {
+      min-height: 400px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+    }
+
+    .template-selector {
+      margin-bottom: 15px;
+    }
+  </style>
+  <!-- 引用外部JavaScript文件 -->
+  <script src="template-generator.js" defer></script>
+</head>
+<body>
+
+<div class="header">
+<h1>HTML 快速模板產生器</h1>
+  <div class="theme-switch">
+    <span>🌞</span>
+    <label class="switch">
+      <input type="checkbox" id="themeToggle">
+      <span class="slider"></span>
+    </label>
+    <span>🌙</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="left-panel">
+    <div class="tabs">
+      <div class="tab active" data-tab="basic">基本設置</div>
+      <div class="tab" data-tab="advanced">進階設置</div>
+      <div class="tab" data-tab="templates">模板選擇</div>
+    </div>
+    
+    <div id="basic" class="tab-content active">
+      <div class="panel">
+        <h3>預設模板</h3>
+        <div class="template-selector">
+          <select id="templateSelect">
+            <option value="blank">空白頁面</option>
+            <option value="blog">部落格頁面</option>
+            <option value="portfolio">作品集頁面</option>
+            <option value="landing">著陸頁</option>
+            <option value="ecommerce">電商頁面</option>
+          </select>
+          <button id="applyTemplateBtn">套用模板</button>
+        </div>
+      </div>
+      
+      <div class="panel">
+        <h3>快速设置</h3>
+        <div class="checkbox-item">
+          <input type="checkbox" id="quickSetup" checked>
+          <label for="quickSetup">使用標準HTML5配置 (包含所有基本元素)</label>
+        </div>
+      </div>
+      
+      <div class="panel" id="customElementsPanel" style="display: none;">
+        <h3>基本元素選擇</h3>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeDoctype" checked>
+          <label for="includeDoctype">包含 Doctype 宣告</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeHtmlStructure" checked>
+          <label for="includeHtmlStructure">包含 html/head/body 基本結構</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeMeta" checked>
+          <label for="includeMeta">包含 Meta 標籤 (charset, viewport)</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeTitle" checked>
+          <label for="includeTitle">包含標題 (Title)</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeCssLink" checked>
+          <label for="includeCssLink">包含 CSS 檔案連結</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeJsScript" checked>
+          <label for="includeJsScript">包含 JavaScript 檔案連結</label>
+        </div>
+      </div>
+      
+      <div class="panel">
+        <h3>自訂項目</h3>
+        <div class="input-item">
+          <label for="pageTitle">網頁標題：</label>
+  <input type="text" id="pageTitle" placeholder="輸入頁面標題">
+        </div>
+        
+        <div class="input-item">
+          <label for="language">語言代碼：</label>
+          <input type="text" id="language" value="zh-Hant" placeholder="例如: zh-Hant, en-US">
+        </div>
+        
+        <div class="input-item">
+          <label for="charset">字元編碼：</label>
+          <input type="text" id="charset" value="UTF-8" placeholder="例如: UTF-8">
+        </div>
+        
+        <div class="input-item">
+          <label for="viewport">視口設定：</label>
+          <input type="text" id="viewport" value="width=device-width, initial-scale=1.0" placeholder="例如: width=device-width, initial-scale=1.0">
+        </div>
+        
+        <div class="input-item">
+          <label for="cssFile">CSS 檔案名稱（選填）：</label>
+  <input type="text" id="cssFile" placeholder="style.css">
+        </div>
+
+        <div class="input-item">
+          <label for="jsFile">JS 檔案名稱（選填）：</label>
+  <input type="text" id="jsFile" placeholder="script.js">
+        </div>
+      </div>
+    </div>
+    
+    <div id="advanced" class="tab-content">
+      <div class="panel">
+        <h3>進階元素選擇</h3>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeHeader">
+          <label for="includeHeader">包含 header 區域</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeNav">
+          <label for="includeNav">包含 nav 導航</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeMain">
+          <label for="includeMain">包含 main 主要內容區</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeAside">
+          <label for="includeAside">包含 aside 側邊欄</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeFooter">
+          <label for="includeFooter">包含 footer 頁尾</label>
+        </div>
+      </div>
+      
+      <div class="panel">
+        <h3>Meta 標籤</h3>
+        <div class="input-item">
+          <label for="description">Description：</label>
+          <input type="text" id="description" placeholder="網站描述">
+        </div>
+        <div class="input-item">
+          <label for="keywords">Keywords：</label>
+          <input type="text" id="keywords" placeholder="關鍵字1, 關鍵字2">
+        </div>
+        <div class="input-item">
+          <label for="author">Author：</label>
+          <input type="text" id="author" placeholder="作者名稱">
+        </div>
+      </div>
+      
+      <div class="panel">
+        <h3>CSS 框架</h3>
+        <div class="checkbox-item">
+          <input type="radio" id="noCssFramework" name="cssFramework" value="none" checked>
+          <label for="noCssFramework">不使用框架</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="radio" id="bootstrap" name="cssFramework" value="bootstrap">
+          <label for="bootstrap">Bootstrap</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="radio" id="tailwind" name="cssFramework" value="tailwind">
+          <label for="tailwind">Tailwind CSS</label>
+        </div>
+      </div>
+    </div>
+    
+    <div id="templates" class="tab-content">
+      <div class="panel">
+        <h3>佈局模板</h3>
+        <div class="checkbox-item">
+          <input type="radio" id="singleColumn" name="layoutTemplate" value="single" checked>
+          <label for="singleColumn">單欄佈局</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="radio" id="twoColumn" name="layoutTemplate" value="two">
+          <label for="twoColumn">雙欄佈局</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="radio" id="threeColumn" name="layoutTemplate" value="three">
+          <label for="threeColumn">三欄佈局</label>
+        </div>
+      </div>
+      
+      <div class="panel">
+        <h3>常用組件</h3>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeHero">
+          <label for="includeHero">Hero 區塊</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeNavbar">
+          <label for="includeNavbar">導航欄</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeCard">
+          <label for="includeCard">卡片組件</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeForm">
+          <label for="includeForm">表單</label>
+        </div>
+      </div>
+      
+      <div class="panel">
+        <h3>保存/加載模板</h3>
+        <div class="input-item">
+          <label for="templateName">模板名稱：</label>
+          <input type="text" id="templateName" placeholder="我的模板">
+        </div>
+        <div class="btn-group">
+          <button id="saveTemplateBtn">保存當前模板</button>
+          <button id="loadTemplateBtn">加載模板</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="btn-group">
+      <button id="generateBtn">產生模板</button>
+      <button id="copyBtn">複製到剪貼簿</button>
+      <button id="downloadBtn">下載 HTML 檔案</button>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="tabs">
+      <div class="tab active" data-tab="code">代碼</div>
+      <div class="tab" data-tab="preview">預覽</div>
+    </div>
+    
+    <div id="code" class="tab-content active">
+      <textarea id="output" readonly placeholder="這裡會顯示產生的HTML模板..."></textarea>
+    </div>
+    
+    <div id="preview" class="tab-content">
+      <div class="preview-container">
+        <iframe id="previewFrame"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
