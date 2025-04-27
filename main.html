@@ -230,7 +230,7 @@
       display: block;
     }
 
-    /* 修复预览和代码标签页样式 */
+    /* 修復預覽和代碼標籤頁樣式 */
     #code.tab-content, #preview.tab-content {
       padding: 0;
       border: none;
@@ -259,6 +259,24 @@
     .template-selector {
       margin-bottom: 15px;
     }
+
+    .color-picker {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .sub-options {
+      margin-left: 25px;
+      display: none;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked ~ .sub-options {
+      display: block;
+    }
   </style>
   <!-- 引用外部JavaScript文件 -->
   <script src="template-generator.js" defer></script>
@@ -283,6 +301,7 @@
       <div class="tab active" data-tab="basic">基本設置</div>
       <div class="tab" data-tab="advanced">進階設置</div>
       <div class="tab" data-tab="templates">模板選擇</div>
+      <div class="tab" data-tab="features">功能增強</div>
     </div>
     
     <div id="basic" class="tab-content active">
@@ -301,7 +320,7 @@
       </div>
       
       <div class="panel">
-        <h3>快速设置</h3>
+        <h3>快速設置</h3>
         <div class="checkbox-item">
           <input type="checkbox" id="quickSetup" checked>
           <label for="quickSetup">使用標準HTML5配置 (包含所有基本元素)</label>
@@ -340,12 +359,18 @@
         <h3>自訂項目</h3>
         <div class="input-item">
           <label for="pageTitle">網頁標題：</label>
-  <input type="text" id="pageTitle" placeholder="輸入頁面標題">
+          <input type="text" id="pageTitle" placeholder="輸入頁面標題">
         </div>
         
         <div class="input-item">
           <label for="language">語言代碼：</label>
-          <input type="text" id="language" value="zh-Hant" placeholder="例如: zh-Hant, en-US">
+          <select id="language">
+            <option value="zh-Hant">繁體中文 (zh-Hant)</option>
+            <option value="zh-Hans">簡體中文 (zh-Hans)</option>
+            <option value="en">英文 (en)</option>
+            <option value="ja">日文 (ja)</option>
+            <option value="ko">韓文 (ko)</option>
+          </select>
         </div>
         
         <div class="input-item">
@@ -360,12 +385,12 @@
         
         <div class="input-item">
           <label for="cssFile">CSS 檔案名稱（選填）：</label>
-  <input type="text" id="cssFile" placeholder="style.css">
+          <input type="text" id="cssFile" placeholder="style.css">
         </div>
 
         <div class="input-item">
           <label for="jsFile">JS 檔案名稱（選填）：</label>
-  <input type="text" id="jsFile" placeholder="script.js">
+          <input type="text" id="jsFile" placeholder="script.js">
         </div>
       </div>
     </div>
@@ -409,6 +434,34 @@
           <label for="author">Author：</label>
           <input type="text" id="author" placeholder="作者名稱">
         </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeSocialMeta">
+          <label for="includeSocialMeta">包含社交媒體 Meta 標籤</label>
+          <div class="sub-options">
+            <div class="input-item">
+              <label for="ogTitle">Open Graph 標題：</label>
+              <input type="text" id="ogTitle" placeholder="社交媒體分享標題">
+            </div>
+            <div class="input-item">
+              <label for="ogDescription">Open Graph 描述：</label>
+              <input type="text" id="ogDescription" placeholder="社交媒體分享描述">
+            </div>
+            <div class="input-item">
+              <label for="ogImage">Open Graph 圖片 URL：</label>
+              <input type="text" id="ogImage" placeholder="例如: https://example.com/image.jpg">
+            </div>
+          </div>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeThemeColor">
+          <label for="includeThemeColor">包含主題色彩</label>
+          <div class="sub-options">
+            <div class="input-item">
+              <label for="themeColor">主題色彩：</label>
+              <input type="color" id="themeColor" value="#4CAF50" class="color-picker">
+            </div>
+          </div>
+        </div>
       </div>
       
       <div class="panel">
@@ -419,11 +472,23 @@
         </div>
         <div class="checkbox-item">
           <input type="radio" id="bootstrap" name="cssFramework" value="bootstrap">
-          <label for="bootstrap">Bootstrap</label>
+          <label for="bootstrap">Bootstrap 5.3.5</label>
         </div>
         <div class="checkbox-item">
           <input type="radio" id="tailwind" name="cssFramework" value="tailwind">
           <label for="tailwind">Tailwind CSS</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeNormalize">
+          <label for="includeNormalize">包含 Modern Normalize CSS</label>
+        </div>
+      </div>
+      
+      <div class="panel">
+        <h3>JavaScript 庫</h3>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeJQuery">
+          <label for="includeJQuery">包含 jQuery 3.7.1</label>
         </div>
       </div>
     </div>
@@ -454,6 +519,12 @@
         <div class="checkbox-item">
           <input type="checkbox" id="includeNavbar">
           <label for="includeNavbar">導航欄</label>
+          <div class="sub-options">
+            <div class="checkbox-item">
+              <input type="checkbox" id="includeBootstrapNavbar">
+              <label for="includeBootstrapNavbar">使用 Bootstrap 頂部選單</label>
+            </div>
+          </div>
         </div>
         <div class="checkbox-item">
           <input type="checkbox" id="includeCard">
@@ -462,6 +533,26 @@
         <div class="checkbox-item">
           <input type="checkbox" id="includeForm">
           <label for="includeForm">表單</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeDummyText">
+          <label for="includeDummyText">包含假文本</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeDummyImages">
+          <label for="includeDummyImages">包含假圖片</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeTable">
+          <label for="includeTable">包含表格</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeCarousel">
+          <label for="includeCarousel">包含輪播 (Bootstrap)</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeAccordion">
+          <label for="includeAccordion">包含折疊面板 (Bootstrap)</label>
         </div>
       </div>
       
@@ -474,6 +565,78 @@
         <div class="btn-group">
           <button id="saveTemplateBtn">保存當前模板</button>
           <button id="loadTemplateBtn">加載模板</button>
+        </div>
+      </div>
+    </div>
+    
+    <div id="features" class="tab-content">
+      <div class="panel">
+        <h3>網站功能</h3>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeManifest">
+          <label for="includeManifest">Web App Manifest</label>
+          <div class="sub-options">
+            <div class="input-item">
+              <label for="appName">應用程式名稱：</label>
+              <input type="text" id="appName" placeholder="應用程式名稱">
+            </div>
+            <div class="input-item">
+              <label for="manifestColor">應用程式主題色：</label>
+              <input type="color" id="manifestColor" value="#4CAF50" class="color-picker">
+            </div>
+          </div>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeFavicons">
+          <label for="includeFavicons">多種 Favicon 圖示</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeAnalytics">
+          <label for="includeAnalytics">包含 Google Analytics</label>
+          <div class="sub-options">
+            <div class="input-item">
+              <label for="gaId">追蹤 ID：</label>
+              <input type="text" id="gaId" placeholder="G-XXXXXXXXXX">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="panel">
+        <h3>特效與互動</h3>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeFadeIn">
+          <label for="includeFadeIn">頁面淡入效果</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeFadeInAfterLoad">
+          <label for="includeFadeInAfterLoad">頁面完全加載後淡入 (需要 jQuery)</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeCookieNotice">
+          <label for="includeCookieNotice">Cookie 通知提示 (需要 jQuery)</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeAnnouncementBar">
+          <label for="includeAnnouncementBar">公告欄</label>
+          <div class="sub-options">
+            <div class="input-item">
+              <label for="announcementText">公告文字：</label>
+              <input type="text" id="announcementText" placeholder="重要公告內容">
+            </div>
+          </div>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeUpgradeMessage">
+          <label for="includeUpgradeMessage">舊瀏覽器升級提示</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeBasicHTML5Tags">
+          <label for="includeBasicHTML5Tags">各種基本 HTML5 語義化標籤</label>
+        </div>
+        <div class="checkbox-item">
+          <input type="checkbox" id="includeTrollface">
+          <label for="includeTrollface">隱藏彩蛋 (Trollface)</label>
         </div>
       </div>
     </div>
