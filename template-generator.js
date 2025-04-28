@@ -183,6 +183,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const includeUpgradeMessage = document.getElementById('includeUpgradeMessage') && document.getElementById('includeUpgradeMessage').checked;
     const includeBasicHTML5Tags = document.getElementById('includeBasicHTML5Tags') && document.getElementById('includeBasicHTML5Tags').checked;
     const includeTrollface = document.getElementById('includeTrollface') && document.getElementById('includeTrollface').checked;
+    const customEasterEggImage = document.getElementById('customEasterEggImage') ? document.getElementById('customEasterEggImage').value : '';
+    const customEasterEggSequence = document.getElementById('customEasterEggSequence') ? document.getElementById('customEasterEggSequence').value : '';
     
     // 使用數組儲存HTML片段
     const htmlParts = [];
@@ -540,6 +542,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // 新增功能: 彩蛋(Trollface)的樣式
       if (includeTrollface) {
+        const easterEggImageUrl = customEasterEggImage || "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cGF0aCBkPSJNMTAwLDU1LjEsNjMuMiwzMS44Yy0uNy0uNC0xLjQtLjQtMi4xLDAtMS43LDEuNC0zLjUsMi44LTUuMiw0LjItMi43LDIuMi01LjQsNC40LTguMSw2LjYtMSwuOC0yLjUsMS0zLjYsMC02LjgtNi4yLTE0LjktNy42LTIyLjMtMy44LTYuOSwzLjYtMTAuMiw5LjMtMTAsOTQuOS0uNiw5LDUuOSwxNS43LDE0LjgsMTUuNC44LS41LDItMS41LDMuMy0xLjksMS4zLS4zLDIuNi0uMSwzLjguNSwyLjcsMS4zLDUuNCwyLjUsOC4xLDMuOC42LjMsMS4zLjMsMS45LDAsMy42LTEuOCw3LjMtMy42LDExLTUuNCw0LjUtMi4yLDktNC40LDEzLjQtNi42LjctLjMsMS40LS4zLDIuMSwwLDYuNCwyLjgsMTIuOCw1LjUsMTkuMiw4LjMuNy4zLDEuNC4zLDIuMSwwLDQtMS44LDgtMy42LDEyLTUuNCwxLjItLjUsMi40LS41LDMuNSwwLDIuNywxLjIsNS4zLDIuNCw4LDMuNi42LjMsMS4zLjIsMS45LDAsMy0xLjMsNi0yLjcsOS00LDEuMi0uNSwyLjUtLjQsMy43LjIsNS43LDIuNywxMS41LDUuNSwxNy4yLDguMi42LjMsMS4zLjMsMS45LDAsMy4zLTEuNSw2LjctMy4xLDEwLTQuNiwxLjEtLjUsMi4yLS41LDMuMywwLDMuMiwxLjYsNi40LDMuMSw5LjYsNC43LjYuMywyLDEuNiwzLjYsMiw2LjYsMS41LDEzLjItLjEsMTgtNC44QzE3OC4yLDEzNS4xLDE3OSwxMjUuOSwxNzcuMSwxMTNsLS45LTktLjgtOC0uNi02LS4yLTJhMTcuOCwxNy44LDAsMCwwLTYuMi0xMS42Yy0xLjctMS40LTMuMy0yLjItNi0yLjhsLTkuNy0yLjMtNy4yLTEuN2MtMS40LS4zLTEuOC0uOS0xLjUtMi4yLjQtMS45LDEtMy44LDEuMi01LjguMi0xLjYuNS0zLjEuNi00LjcuMS0yLTEuMi0zLjMtMy4yLTMuMS0yLjIuMi00LjQuNC02LjYuOC0uNy4xLTEuNC4yLTIuMS4zLTEuMS4yLTEuNy0uMi0yLjEtMS4zLS42LTEuOC0xLjItMy43LTEuNy01LjZzLTEtMy45LTEuNi01LjgtLjktMS40LTIuNC0xLjNjLTIuNS4xLTUuMS4yLTcuNi4xLTkuMi0uMi0xOC40LS41LTI3LjYtLjVzLTE4LjQtLjQtMjcuNi0xLjNjLTMuMi0uMy01LjcsLjgtNy44LDNsLTcuOCw4LjRjLS43LC44LTEuNCwxLjYtMiwzLjIsLjgsLjQsMS41LC42LDIuMiwuNywxLC4yLDIuMS4zLDIuOS40LDEuNiwuMSwyLjQsLjksMi42LDIuNSwuMiwyLjEsLjUsMi44LDIuNiwyLjYsMi4zLS4zLDQuNS0uNiw2LjgtLjksMSwuMywxLjgsLjgsMS43LDEuN3MtLjgsMi0xLjksMi43Wm0tNjAuMiw1LjljMi43LDAsNS0yLjMsNS01cy0yLjMtNS01LTUtNSwyLjMtNSw1LDIuMyw1LDUsWk0xNTQsMTUwbC00MS42LTE5LjktNDMuNy0yMC45Yy0uNy0uMy0xLjMtLjMtMS45LDAtNi40LDMuMi0xMi44LDYuMy0xOS4yLDkuNS0uNiwuMy0uNywxLTEuMiwxLjItMS4xLDEuMi0xLjQuOC4yLDEuOSw0LjMsMywxOS44LDguNCwzOC44LDE2LjUsMTYuNS43LDUzLjQsMi4zLDY4LS40LjgtLjQtLjEtMi4zLTEuNy0zcy0yLjEtLjgtMi0yLjJaIi8+PC9zdmc+";
         htmlParts.push('    .trollface-easter-egg {');
         htmlParts.push('      display: none;');
         htmlParts.push('      position: fixed;');
@@ -547,7 +550,7 @@ document.addEventListener('DOMContentLoaded', function() {
         htmlParts.push('      right: 20px;');
         htmlParts.push('      width: 100px;');
         htmlParts.push('      height: 100px;');
-        htmlParts.push('      background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cGF0aCBkPSJNMTAwLDU1LjEsNjMuMiwzMS44Yy0uNy0uNC0xLjQtLjQtMi4xLDAtMS43LDEuNC0zLjUsMi44LTUuMiw0LjItMi43LDIuMi01LjQsNC40LTguMSw2LjYtMSwuOC0yLjUsMS0zLjYsMC02LjgtNi4yLTE0LjktNy42LTIyLjMtMy44LTYuOSwzLjYtMTAuMiw5LjMtMTAsOTQuOS0uNiw5LDUuOSwxNS43LDE0LjgsMTUuNC44LS41LDItMS41LDMuMy0xLjksMS4zLS4zLDIuNi0uMSwzLjguNSwyLjcsMS4zLDUuNCwyLjUsOC4xLDMuOC42LjMsMS4zLjMsMS45LDAsMy42LTEuOCw3LjMtMy42LDExLTUuNCw0LjUtMi4yLDktNC40LDEzLjQtNi42LjctLjMsMS40LS4zLDIuMSwwLDYuNCwyLjgsMTIuOCw1LjUsMTkuMiw4LjMuNy4zLDEuNC4zLDIuMSwwLDQtMS44LDgtMy42LDEyLTUuNCwxLjItLjUsMi40LS41LDMuNSwwLDIuNywxLjIsNS4zLDIuNCw4LDMuNi42LjMsMS4zLjIsMS45LDAsMy0xLjMsNi0yLjcsOS00LDEuMi0uNSwyLjUtLjQsMy43LjIsNS43LDIuNywxMS41LDUuNSwxNy4yLDguMi42LjMsMS4zLjMsMS45LDAsMy4zLTEuNSw2LjctMy4xLDEwLTQuNiwxLjEtLjUsMi4yLS41LDMuMywwLDMuMiwxLjYsNi40LDMuMSw5LjYsNC43LjYuMywyLDEuNiwzLjYsMiw2LjYsMS41LDEzLjItLjEsMTgtNC44QzE3OC4yLDEzNS4xLDE3OSwxMjUuOSwxNzcuMSwxMTNsLS45LTktLjgtOC0uNi02LS4yLTJhMTcuOCwxNy44LDAsMCwwLTYuMi0xMS42Yy0xLjctMS40LTMuMy0yLjItNi0yLjhsLTkuNy0yLjMtNy4yLTEuN2MtMS40LS4zLTEuOC0uOS0xLjUtMi4yLjQtMS45LDEtMy44LDEuMi01LjguMi0xLjYuNS0zLjEuNi00LjcuMS0yLTEuMi0zLjMtMy4yLTMuMS0yLjIuMi00LjQuNC02LjYuOC0uNy4xLTEuNC4yLTIuMS4zLTEuMS4yLTEuNy0uMi0yLjEtMS4zLS42LTEuOC0xLjItMy43LTEuNy01LjZzLTEtMy45LTEuNi01LjgtLjktMS40LTIuNC0xLjNjLTIuNS4xLTUuMS4yLTcuNi4xLTkuMi0uMi0xOC40LS41LTI3LjYtLjVzLTE4LjQtLjQtMjcuNi0xLjNjLTMuMi0uMy01LjcsLjgtNy44LDNsLTcuOCw4LjRjLS43LC44LTEuNCwxLjYtMiwzLjIsLjgsLjQsMS41LC42LDIuMiwuNywxLC4yLDIuMS4zLDIuOS40LDEuNiwuMSwyLjQsLjksMi42LDIuNSwuMiwyLjEsLjUsMi44LDIuNiwyLjYsMi4zLS4zLDQuNS0uNiw2LjgtLjksMSwuMywxLjgsLjgsMS43LDEuN3MtLjgsMi0xLjksMi43Wm0tNjAuMiw1LjljMi43LDAsNS0yLjMsNS01cy0yLjMtNS01LTUtNSwyLjMtNSw1LDIuMyw1LDUsWk0xNTQsMTUwbC00MS42LTE5LjktNDMuNy0yMC45Yy0uNy0uMy0xLjMtLjMtMS45LDAtNi40LDMuMi0xMi44LDYuMy0xOS4yLDkuNS0uNiwuMy0uNywxLTEuMiwxLjItMS4xLDEuMi0xLjQuOC4yLDEuOSw0LjMsMywxOS44LDguNCwzOC44LDE2LjUsMTYuNS43LDUzLjQsMi4zLDY4LS40LjgtLjQtLjEtMi4zLTEuNy0zcy0yLjEtLjgtMi0yLjJaIi8+PC9zdmc+");');
+        htmlParts.push('      background-image: url("' + easterEggImageUrl + '");');
         htmlParts.push('      background-size: contain;');
         htmlParts.push('      z-index: 9999;');
         htmlParts.push('      cursor: pointer;');
@@ -1035,7 +1038,8 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // 新增功能: Trollface彩蛋
       if (includeTrollface) {
-        htmlParts.push('  <div class="trollface-easter-egg" id="trollfaceEgg"></div>');
+        const easterEggTitle = customEasterEggImage ? '自定義彩蛋' : 'Trollface彩蛋';
+        htmlParts.push('  <div class="trollface-easter-egg" id="trollfaceEgg" title="' + easterEggTitle + '"></div>');
       }
       
       // 新增功能: jQuery
@@ -1070,7 +1074,7 @@ document.addEventListener('DOMContentLoaded', function() {
         htmlParts.push('    document.addEventListener("DOMContentLoaded", function() {');
         
         // 頁面淡入效果
-        if (includeFadeIn) {
+      if (includeFadeIn) {
           htmlParts.push('      // 頁面淡入效果');
           htmlParts.push('      setTimeout(function() {');
           htmlParts.push('        document.body.classList.add("fade-in");');
@@ -1079,18 +1083,20 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Trollface彩蛋
         if (includeTrollface) {
-          htmlParts.push('      // 隱藏的Trollface彩蛋 - 按下鍵盤 T+R+O+L+L 後顯示');
+          const triggerSequence = customEasterEggSequence || 'troll';
+          
+          htmlParts.push('      // 隱藏的彩蛋 - 按下鍵盤序列後顯示');
           htmlParts.push('      let keySequence = "";');
-          htmlParts.push('      const targetSequence = "troll";');
+          htmlParts.push('      const targetSequence = "' + triggerSequence + '";');
           htmlParts.push('      document.addEventListener("keydown", function(e) {');
           htmlParts.push('        keySequence += e.key.toLowerCase();');
           htmlParts.push('        if (keySequence.includes(targetSequence)) {');
           htmlParts.push('          document.getElementById("trollfaceEgg").style.display = "block";');
           htmlParts.push('          keySequence = "";');
           htmlParts.push('        }');
-          htmlParts.push('        // 只保留最後5個按鍵');
-          htmlParts.push('        if (keySequence.length > 5) {');
-          htmlParts.push('          keySequence = keySequence.slice(-5);');
+          htmlParts.push('        // 只保留最後' + (triggerSequence.length > 5 ? triggerSequence.length : 5) + '個按鍵');
+          htmlParts.push('        if (keySequence.length > ' + (triggerSequence.length > 5 ? triggerSequence.length : 5) + ') {');
+          htmlParts.push('          keySequence = keySequence.slice(-' + (triggerSequence.length > 5 ? triggerSequence.length : 5) + ');');
           htmlParts.push('        }');
           htmlParts.push('      });');
           htmlParts.push('      // 點擊Trollface後隱藏');
@@ -1144,7 +1150,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!jsFile.startsWith('http') && !jsFile.startsWith('//')) {
           htmlParts.push('  <!-- 注意: 以下腳本文件在預覽中可能不存在 -->');
           htmlParts.push('  <script src="' + jsFile + '"></script>');
-        } else {
+          } else {
           htmlParts.push('  <script src="' + jsFile + '"></script>');
         }
       }
@@ -1348,7 +1354,9 @@ document.addEventListener('DOMContentLoaded', function() {
       announcementText: document.getElementById('announcementText') ? document.getElementById('announcementText').value : '',
       includeUpgradeMessage: document.getElementById('includeUpgradeMessage') ? document.getElementById('includeUpgradeMessage').checked : false,
       includeBasicHTML5Tags: document.getElementById('includeBasicHTML5Tags') ? document.getElementById('includeBasicHTML5Tags').checked : false,
-      includeTrollface: document.getElementById('includeTrollface') ? document.getElementById('includeTrollface').checked : false
+      includeTrollface: document.getElementById('includeTrollface') ? document.getElementById('includeTrollface').checked : false,
+      customEasterEggImage: document.getElementById('customEasterEggImage') ? document.getElementById('customEasterEggImage').value : '',
+      customEasterEggSequence: document.getElementById('customEasterEggSequence') ? document.getElementById('customEasterEggSequence').value : ''
     };
     
     // 儲存到localStorage
@@ -1512,6 +1520,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     if (document.getElementById('includeTrollface')) {
       document.getElementById('includeTrollface').checked = settings.includeTrollface || false;
+      if (document.getElementById('customEasterEggImage')) {
+        document.getElementById('customEasterEggImage').value = settings.customEasterEggImage || '';
+      }
+      if (document.getElementById('customEasterEggSequence')) {
+        document.getElementById('customEasterEggSequence').value = settings.customEasterEggSequence || '';
+      }
     }
   }
   
