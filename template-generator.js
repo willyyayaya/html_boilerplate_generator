@@ -423,10 +423,9 @@ document.addEventListener('DOMContentLoaded', function() {
         htmlParts.push('      background: white;');
         htmlParts.push('      color: black;');
         htmlParts.push('      border: none;');
-        htmlParts.push('      padding: 8px 15px;');
-        htmlParts.push('      margin-left: 10px;');
+        htmlParts.push('      padding: 10px 15px;');
+        htmlParts.push('      border-radius: 4px;');
         htmlParts.push('      cursor: pointer;');
-        htmlParts.push('      border-radius: 3px;');
         htmlParts.push('    }');
       }
       
@@ -542,7 +541,9 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // 新增功能: 彩蛋(Trollface)的樣式
       if (includeTrollface) {
-        const easterEggImageUrl = customEasterEggImage || "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48cGF0aCBkPSJNMTAwLDU1LjEsNjMuMiwzMS44Yy0uNy0uNC0xLjQtLjQtMi4xLDAtMS43LDEuNC0zLjUsMi44LTUuMiw0LjItMi43LDIuMi01LjQsNC40LTguMSw2LjYtMSwuOC0yLjUsMS0zLjYsMC02LjgtNi4yLTE0LjktNy42LTIyLjMtMy44LTYuOSwzLjYtMTAuMiw5LjMtMTAsOTQuOS0uNiw5LDUuOSwxNS43LDE0LjgsMTUuNC44LS41LDItMS41LDMuMy0xLjksMS4zLS4zLDIuNi0uMSwzLjguNSwyLjcsMS4zLDUuNCwyLjUsOC4xLDMuOC42LjMsMS4zLjMsMS45LDAsMy42LTEuOCw3LjMtMy42LDExLTUuNCw0LjUtMi4yLDktNC40LDEzLjQtNi42LjctLjMsMS40LS4zLDIuMSwwLDYuNCwyLjgsMTIuOCw1LjUsMTkuMiw4LjMuNy4zLDEuNC4zLDIuMSwwLDQtMS44LDgtMy42LDEyLTUuNCwxLjItLjUsMi40LS41LDMuNSwwLDIuNywxLjIsNS4zLDIuNCw4LDMuNi42LjMsMS4zLjIsMS45LDAsMy0xLjMsNi0yLjcsOS00LDEuMi0uNSwyLjUtLjQsMy43LjIsNS43LDIuNywxMS41LDUuNSwxNy4yLDguMi42LjMsMS4zLjMsMS45LDAsMy4zLTEuNSw2LjctMy4xLDEwLTQuNiwxLjEtLjUsMi4yLS41LDMuMywwLDMuMiwxLjYsNi40LDMuMSw5LjYsNC43LjYuMywyLDEuNiwzLjYsMiw2LjYsMS41LDEzLjItLjEsMTgtNC44QzE3OC4yLDEzNS4xLDE3OSwxMjUuOSwxNzcuMSwxMTNsLS45LTktLjgtOC0uNi02LS4yLTJhMTcuOCwxNy44LDAsMCwwLTYuMi0xMS42Yy0xLjctMS40LTMuMy0yLjItNi0yLjhsLTkuNy0yLjMtNy4yLTEuN2MtMS40LS4zLTEuOC0uOS0xLjUtMi4yLjQtMS45LDEtMy44LDEuMi01LjguMi0xLjYuNS0zLjEuNi00LjcuMS0yLTEuMi0zLjMtMy4yLTMuMS0yLjIuMi00LjQuNC02LjYuOC0uNy4xLTEuNC4yLTIuMS4zLTEuMS4yLTEuNy0uMi0yLjEtMS4zLS42LTEuOC0xLjItMy43LTEuNy01LjZzLTEtMy45LTEuNi01LjgtLjktMS40LTIuNC0xLjNjLTIuNS4xLTUuMS4yLTcuNi4xLTkuMi0uMi0xOC40LS41LTI3LjYtLjVzLTE4LjQtLjQtMjcuNi0xLjNjLTMuMi0uMy01LjcsLjgtNy44LDNsLTcuOCw4LjRjLS43LC44LTEuNCwxLjYtMiwzLjIsLjgsLjQsMS41LC42LDIuMiwuNywxLC4yLDIuMS4zLDIuOS40LDEuNiwuMSwyLjQsLjksMi42LDIuNSwuMiwyLjEsLjUsMi44LDIuNiwyLjYsMi4zLS4zLDQuNS0uNiw2LjgtLjksMSwuMywxLjgsLjgsMS43LDEuN3MtLjgsMi0xLjksMi43Wm0tNjAuMiw1LjljMi43LDAsNS0yLjMsNS01cy0yLjMtNS01LTUtNSwyLjMtNSw1LDIuMyw1LDUsWk0xNTQsMTUwbC00MS42LTE5LjktNDMuNy0yMC45Yy0uNy0uMy0xLjMtLjMtMS45LDAtNi40LDMuMi0xMi44LDYuMy0xOS4yLDkuNS0uNiwuMy0uNywxLTEuMiwxLjItMS4xLDEuMi0xLjQuOC4yLDEuOSw0LjMsMywxOS44LDguNCwzOC44LDE2LjUsMTYuNS43LDUzLjQsMi4zLDY4LS40LjgtLjQtLjEtMi4zLTEuNy0zcy0yLjEtLjgtMi0yLjJaIi8+PC9zdmc+";
+        // 紅色方塊的BASE64編碼 - 繁體中文
+        const redSquare = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2ZmMDAwMCIvPjwvc3ZnPg==";
+        const easterEggImageUrl = customEasterEggImage || redSquare;
         htmlParts.push('    .trollface-easter-egg {');
         htmlParts.push('      display: none;');
         htmlParts.push('      position: fixed;');
@@ -727,10 +728,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // 假圖片或佔位符
             if (includeDummyImages) {
-              htmlParts.push('            <img src="https://via.placeholder.com/800x400?text=Slide+1" class="d-block w-100" alt="Slide 1">');
+              // 藍色方塊的BASE64編碼 - 繁體中文
+              const blueSquare = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iIzAwNjZjYyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMzAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPuWclueJh+WIl+WLlSAxPC90ZXh0Pjwvc3ZnPg==";
+              htmlParts.push('            <img src="' + blueSquare + '" class="d-block w-100" alt="Slide 1">');
             } else {
               htmlParts.push('            <div style="background: #777; height: 400px; display: flex; align-items: center; justify-content: center;">');
-              htmlParts.push('              <h5 style="color: white;">幻燈片 1</h5>');
+              htmlParts.push('              <h5 style="color: white;">圖片區塊 1</h5>');
               htmlParts.push('            </div>');
             }
             
@@ -742,10 +745,12 @@ document.addEventListener('DOMContentLoaded', function() {
             htmlParts.push('          <div class="carousel-item">');
             
             if (includeDummyImages) {
-              htmlParts.push('            <img src="https://via.placeholder.com/800x400?text=Slide+2" class="d-block w-100" alt="Slide 2">');
+              // 綠色方塊的BASE64編碼 - 繁體中文
+              const greenSquare = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iIzAwOTkzMyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMzAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPuWclueJh+WIl+WLlSAyPC90ZXh0Pjwvc3ZnPg==";
+              htmlParts.push('            <img src="' + greenSquare + '" class="d-block w-100" alt="Slide 2">');
             } else {
               htmlParts.push('            <div style="background: #777; height: 400px; display: flex; align-items: center; justify-content: center;">');
-              htmlParts.push('              <h5 style="color: white;">幻燈片 2</h5>');
+              htmlParts.push('              <h5 style="color: white;">圖片區塊 2</h5>');
               htmlParts.push('            </div>');
             }
             
@@ -757,10 +762,12 @@ document.addEventListener('DOMContentLoaded', function() {
             htmlParts.push('          <div class="carousel-item">');
             
             if (includeDummyImages) {
-              htmlParts.push('            <img src="https://via.placeholder.com/800x400?text=Slide+3" class="d-block w-100" alt="Slide 3">');
+              // 黃色方塊的BASE64編碼 - 繁體中文
+              const yellowSquare = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2ZmY2MwMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMzAiIGZpbGw9IiMwMDAwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPuWclueJh+WIl+WLlSAzPC90ZXh0Pjwvc3ZnPg==";
+              htmlParts.push('            <img src="' + yellowSquare + '" class="d-block w-100" alt="Slide 3">');
             } else {
               htmlParts.push('            <div style="background: #777; height: 400px; display: flex; align-items: center; justify-content: center;">');
-              htmlParts.push('              <h5 style="color: white;">幻燈片 3</h5>');
+              htmlParts.push('              <h5 style="color: white;">圖片區塊 3</h5>');
               htmlParts.push('            </div>');
             }
             
@@ -844,7 +851,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 htmlParts.push('        <div class="col">');
                 htmlParts.push('          <div class="card h-100">');
                 if (includeDummyImages) {
-                  htmlParts.push('            <img src="https://via.placeholder.com/300x200?text=Card+Image+' + i + '" class="card-img-top" alt="Card image">');
+                  // 紫色方塊的BASE64編碼 - 繁體中文
+                  const purpleSquare = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzY2MzM5OSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPuWclueJh+aWh+Wtl+WIl+WLlTwvdGV4dD48L3N2Zz4=";
+                  htmlParts.push('            <img src="' + purpleSquare + '" class="card-img-top" alt="Card image">');
+                } else {
+                  htmlParts.push('            <div style="background: #777; height: 400px; display: flex; align-items: center; justify-content: center;">');
+                  htmlParts.push('              <h5 style="color: white;">圖片位置</h5>');
+                  htmlParts.push('            </div>');
                 }
                 htmlParts.push('            <div class="card-body">');
                 htmlParts.push('              <h5 class="card-title">卡片標題 ' + i + '</h5>');
