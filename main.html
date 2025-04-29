@@ -277,6 +277,162 @@
     .checkbox-item input[type="checkbox"]:checked ~ .sub-options {
       display: block;
     }
+
+    /* CSS模板、JS模板和客製化排版樣式 */
+    .code-block {
+      background-color: #f5f5f5;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 10px;
+      margin: 10px 0;
+      font-family: monospace;
+      color: #333;
+      white-space: pre-wrap;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+    
+    .dark-theme .code-block {
+      background-color: #2d2d2d;
+      color: #f5f5f5;
+    }
+    
+    #cssEditor, #jsEditor {
+      width: 100%;
+      height: 250px;
+      font-family: monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      resize: vertical;
+    }
+    
+    .element-palette {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      border-radius: 4px;
+      min-height: 100px;
+    }
+    
+    .element-item {
+      width: 80px;
+      height: 80px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      cursor: grab;
+      font-size: 12px;
+      text-align: center;
+      padding: 5px;
+      transition: all 0.2s;
+    }
+    
+    .dark-theme .element-item {
+      background-color: #333;
+      color: #eee;
+    }
+    
+    .element-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .element-item img {
+      width: 32px;
+      height: 32px;
+      margin-bottom: 5px;
+    }
+    
+    .page-canvas {
+      width: 100%;
+      height: 400px;
+      border: 1px solid var(--border-color);
+      background-color: white;
+      position: relative;
+      overflow: auto;
+      border-radius: 4px;
+    }
+    
+    .dark-theme .page-canvas {
+      background-color: #333;
+    }
+    
+    .properties-panel {
+      width: 100%;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 10px;
+      margin-top: 10px;
+      min-height: 200px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .editable-element {
+      border: 1px dashed transparent;
+      padding: 5px;
+      margin: 5px;
+      cursor: move;
+    }
+    
+    .editable-element:hover {
+      border-color: var(--primary-color);
+    }
+    
+    .editable-element.selected {
+      border: 2px solid var(--primary-color);
+      position: relative;
+    }
+    
+    .layout-builder {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 15px;
+    }
+    
+    @media (max-width: 992px) {
+      .layout-builder {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .delete-element-btn {
+      background-color: #f44336;
+      margin-top: 15px;
+    }
+    
+    .delete-element-btn:hover {
+      background-color: #d32f2f;
+    }
+    
+    .js-module {
+      margin-right: 8px;
+    }
+    
+    .module-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+    }
+    
+    .module-group label {
+      margin-top: 0;
+      margin-left: 8px;
+    }
+    
+    #cssTemplateSelect, #cssEditor, #jsEditor {
+      margin-bottom: 10px;
+    }
   </style>
   <!-- 引用外部JavaScript文件 -->
   <script src="template_generator.js" defer></script>
@@ -302,6 +458,9 @@
       <div class="tab" data-tab="advanced">進階設置</div>
       <div class="tab" data-tab="templates">模板選擇</div>
       <div class="tab" data-tab="features">功能增強</div>
+      <div class="tab" data-tab="css">CSS模板</div>
+      <div class="tab" data-tab="js">JS模板</div>
+      <div class="tab" data-tab="layout">客製化排版</div>
     </div>
     
     <div id="basic" class="tab-content active">
@@ -646,6 +805,89 @@
               <label for="customEasterEggSequence">自定義觸發按鍵序列：</label>
               <input type="text" id="customEasterEggSequence" placeholder="默認為'troll'">
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="css" class="tab-content">
+      <div class="panel">
+        <h3>CSS模板選擇</h3>
+        <div class="input-item">
+          <label for="cssTemplateSelect">選擇樣式模板：</label>
+          <select id="cssTemplateSelect">
+            <option value="">-- 選擇樣式模板 --</option>
+            <!-- CSS模板將由JavaScript動態加載 -->
+          </select>
+        </div>
+      </div>
+      
+      <div class="panel">
+        <h3>顏色方案</h3>
+        <div class="input-item">
+          <label for="css-primaryColor">主要顏色：</label>
+          <input type="color" id="css-primaryColor" class="color-picker">
+        </div>
+        <div class="input-item">
+          <label for="css-secondaryColor">次要顏色：</label>
+          <input type="color" id="css-secondaryColor" class="color-picker">
+        </div>
+        <div class="input-item">
+          <label for="css-textColor">文字顏色：</label>
+          <input type="color" id="css-textColor" class="color-picker">
+        </div>
+        <div class="input-item">
+          <label for="css-backgroundColor">背景顏色：</label>
+          <input type="color" id="css-backgroundColor" class="color-picker">
+        </div>
+      </div>
+      
+      <div class="panel">
+        <h3>CSS編輯器</h3>
+        <textarea id="cssEditor" placeholder="在此編輯CSS代碼..."></textarea>
+        <button id="updateCssPreviewBtn">更新CSS預覽</button>
+      </div>
+    </div>
+    
+    <div id="js" class="tab-content">
+      <div class="panel">
+        <h3>JavaScript功能模塊</h3>
+        <div id="jsModulesContainer">
+          <!-- JS模塊將由JavaScript動態加載 -->
+        </div>
+      </div>
+      
+      <div class="panel">
+        <h3>依賴項</h3>
+        <div id="jsDependencies" class="code-block"></div>
+      </div>
+      
+      <div class="panel">
+        <h3>JavaScript編輯器</h3>
+        <textarea id="jsEditor" placeholder="在此編輯JavaScript代碼..."></textarea>
+      </div>
+    </div>
+    
+    <div id="layout" class="tab-content">
+      <div class="layout-builder">
+        <div class="elements-sidebar">
+          <h3>元素庫</h3>
+          <div id="elementPalette" class="element-palette">
+            <!-- 元素將由JavaScript動態加載 -->
+          </div>
+        </div>
+        
+        <div class="canvas-container">
+          <h3>頁面畫布</h3>
+          <div id="pageCanvas" class="page-canvas">
+            <!-- 拖放內容區域 -->
+          </div>
+        </div>
+        
+        <div class="properties-sidebar">
+          <h3>屬性面板</h3>
+          <div id="propertiesPanel" class="properties-panel">
+            <!-- 選中元素的屬性控制 -->
           </div>
         </div>
       </div>
