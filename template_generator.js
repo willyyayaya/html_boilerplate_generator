@@ -104,1120 +104,189 @@ document.addEventListener('DOMContentLoaded', function() {
     const customCSS = document.getElementById('cssEditor') ? document.getElementById('cssEditor').value : '';
     const customJS = document.getElementById('jsEditor') ? document.getElementById('jsEditor').value : '';
     
-    // 是否使用快速設置
-    const quickSetup = document.getElementById('quickSetup').checked;
+    // 獲取畫布內容
+    const pageCanvas = document.getElementById('pageCanvas');
+    let canvasContent = '';
     
-    // 獲取基本元素選擇
-    const includeDoctype = quickSetup || document.getElementById('includeDoctype').checked;
-    const includeHtmlStructure = quickSetup || document.getElementById('includeHtmlStructure').checked;
-    const includeMeta = quickSetup || document.getElementById('includeMeta').checked;
-    const includeTitle = quickSetup || document.getElementById('includeTitle').checked;
-    const includeCssLink = quickSetup || document.getElementById('includeCssLink').checked;
-    const includeJsScript = quickSetup || document.getElementById('includeJsScript').checked;
-    
-    // 獲取自定義內容
-    const pageTitle = document.getElementById('pageTitle').value || '我的網站';
-    const cssFile = document.getElementById('cssFile').value || 'style.css';
-    const jsFile = document.getElementById('jsFile').value || 'script.js';
-    const language = document.getElementById('language').value || 'zh-Hant';
-    const charset = document.getElementById('charset').value || 'UTF-8';
-    const viewport = document.getElementById('viewport').value || 'width=device-width, initial-scale=1.0';
-    
-    // 獲取進階設置
-    const includeHeader = document.getElementById('includeHeader').checked;
-    const includeNav = document.getElementById('includeNav').checked;
-    const includeMain = document.getElementById('includeMain').checked;
-    const includeAside = document.getElementById('includeAside').checked;
-    const includeFooter = document.getElementById('includeFooter').checked;
-    
-    // 獲取Meta標籤
-    const description = document.getElementById('description').value;
-    const keywords = document.getElementById('keywords').value;
-    const author = document.getElementById('author').value;
-    
-    // 新增功能: 社交媒體Meta標籤
-    const includeSocialMeta = document.getElementById('includeSocialMeta') && document.getElementById('includeSocialMeta').checked;
-    const ogTitle = document.getElementById('ogTitle') ? document.getElementById('ogTitle').value : '';
-    const ogDescription = document.getElementById('ogDescription') ? document.getElementById('ogDescription').value : '';
-    const ogImage = document.getElementById('ogImage') ? document.getElementById('ogImage').value : '';
-    
-    // 新增功能: 主題色彩
-    const includeThemeColor = document.getElementById('includeThemeColor') && document.getElementById('includeThemeColor').checked;
-    const themeColor = document.getElementById('themeColor') ? document.getElementById('themeColor').value : '#4CAF50';
-    
-    // 獲取CSS框架
-    const cssFramework = document.querySelector('input[name="cssFramework"]:checked').value;
-    
-    // 新增功能: Modern Normalize CSS
-    const includeNormalize = document.getElementById('includeNormalize') && document.getElementById('includeNormalize').checked;
-    
-    // 新增功能: jQuery
-    const includeJQuery = document.getElementById('includeJQuery') && document.getElementById('includeJQuery').checked;
-    
-    // 獲取佈局模板
-    const layoutTemplate = document.querySelector('input[name="layoutTemplate"]:checked').value;
-    
-    // 獲取組件
-    const includeHero = document.getElementById('includeHero').checked;
-    const includeNavbar = document.getElementById('includeNavbar').checked;
-    const includeCard = document.getElementById('includeCard').checked;
-    const includeForm = document.getElementById('includeForm').checked;
-    
-    // 新增功能: Bootstrap導航欄
-    const includeBootstrapNavbar = document.getElementById('includeBootstrapNavbar') && document.getElementById('includeBootstrapNavbar').checked;
-    
-    // 新增功能: 假文本和圖片
-    const includeDummyText = document.getElementById('includeDummyText') && document.getElementById('includeDummyText').checked;
-    const includeDummyImages = document.getElementById('includeDummyImages') && document.getElementById('includeDummyImages').checked;
-    
-    // 新增功能: 表格、輪播和折疊面板
-    const includeTable = document.getElementById('includeTable') && document.getElementById('includeTable').checked;
-    const includeCarousel = document.getElementById('includeCarousel') && document.getElementById('includeCarousel').checked;
-    const includeAccordion = document.getElementById('includeAccordion') && document.getElementById('includeAccordion').checked;
-    
-    // 新增功能: Web App Manifest
-    const includeManifest = document.getElementById('includeManifest') && document.getElementById('includeManifest').checked;
-    const appName = document.getElementById('appName') ? document.getElementById('appName').value : pageTitle;
-    const manifestColor = document.getElementById('manifestColor') ? document.getElementById('manifestColor').value : '#4CAF50';
-    
-    // 新增功能: Favicons
-    const includeFavicons = document.getElementById('includeFavicons') && document.getElementById('includeFavicons').checked;
-    
-    // 新增功能: Google Analytics
-    const includeAnalytics = document.getElementById('includeAnalytics') && document.getElementById('includeAnalytics').checked;
-    const gaId = document.getElementById('gaId') ? document.getElementById('gaId').value : '';
-    
-    // 新增功能: 頁面特效
-    const includeFadeIn = document.getElementById('includeFadeIn') && document.getElementById('includeFadeIn').checked;
-    const includeFadeInAfterLoad = document.getElementById('includeFadeInAfterLoad') && document.getElementById('includeFadeInAfterLoad').checked;
-    const includeCookieNotice = document.getElementById('includeCookieNotice') && document.getElementById('includeCookieNotice').checked;
-    const includeAnnouncementBar = document.getElementById('includeAnnouncementBar') && document.getElementById('includeAnnouncementBar').checked;
-    const announcementText = document.getElementById('announcementText') ? document.getElementById('announcementText').value : '重要公告：這是一則公告訊息';
-    const includeUpgradeMessage = document.getElementById('includeUpgradeMessage') && document.getElementById('includeUpgradeMessage').checked;
-    const includeBasicHTML5Tags = document.getElementById('includeBasicHTML5Tags') && document.getElementById('includeBasicHTML5Tags').checked;
-    const includeTrollface = document.getElementById('includeTrollface') && document.getElementById('includeTrollface').checked;
-    const customEasterEggImage = document.getElementById('customEasterEggImage') ? document.getElementById('customEasterEggImage').value : '';
-    const customEasterEggSequence = document.getElementById('customEasterEggSequence') ? document.getElementById('customEasterEggSequence').value : '';
-    
-    // 使用數組儲存HTML片段
-    const htmlParts = [];
-    
-    // Doctype
-    if (includeDoctype) {
-      htmlParts.push('<!DOCTYPE html>');
+    if (pageCanvas) {
+      // 複製畫布內容並移除編輯相關的屬性
+      const canvasClone = pageCanvas.cloneNode(true);
+      const editableElements = canvasClone.querySelectorAll('.editable-element');
+      
+      editableElements.forEach(element => {
+        // 移除編輯相關的屬性
+        element.removeAttribute('draggable');
+        element.removeAttribute('data-element-type');
+        element.removeAttribute('data-element-id');
+        element.classList.remove('editable-element');
+        element.classList.remove('selected');
+        
+        // 保留其他類名
+        const classList = Array.from(element.classList);
+        element.className = classList.join(' ');
+      });
+      
+      canvasContent = canvasClone.innerHTML;
     }
     
-    // HTML結構
-    if (includeHtmlStructure) {
-      htmlParts.push('<html' + (language ? ' lang="' + language + '"' : '') + '>');
+    // 生成 HTML 模板
+    const htmlParts = [];
+    
+    // 添加 DOCTYPE
+      htmlParts.push('<!DOCTYPE html>');
+    
+    // 添加 HTML 標籤
+    htmlParts.push('<html lang="zh-Hant">');
+    
+    // 添加 head 部分
       htmlParts.push('<head>');
-      
-      // Meta標籤
-      if (includeMeta) {
-        htmlParts.push('  <meta charset="' + charset + '">');
-        htmlParts.push('  <meta name="viewport" content="' + viewport + '">');
-        
-        // 額外的Meta標籤
-        if (description) {
-          htmlParts.push('  <meta name="description" content="' + description + '">');
-        }
-        if (keywords) {
-          htmlParts.push('  <meta name="keywords" content="' + keywords + '">');
-        }
-        if (author) {
-          htmlParts.push('  <meta name="author" content="' + author + '">');
-        }
-        
-        // 新增功能: 社交媒體Meta標籤
-        if (includeSocialMeta) {
-          htmlParts.push('  <!-- Open Graph / Facebook -->');
-          htmlParts.push('  <meta property="og:type" content="website">');
-          htmlParts.push('  <meta property="og:url" content="https://example.com/">');
-          htmlParts.push('  <meta property="og:title" content="' + (ogTitle || pageTitle) + '">');
-          htmlParts.push('  <meta property="og:description" content="' + (ogDescription || description) + '">');
-          if (ogImage) {
-            htmlParts.push('  <meta property="og:image" content="' + ogImage + '">');
-          }
-          
-          htmlParts.push('  <!-- Twitter -->');
-          htmlParts.push('  <meta property="twitter:card" content="summary_large_image">');
-          htmlParts.push('  <meta property="twitter:url" content="https://example.com/">');
-          htmlParts.push('  <meta property="twitter:title" content="' + (ogTitle || pageTitle) + '">');
-          htmlParts.push('  <meta property="twitter:description" content="' + (ogDescription || description) + '">');
-          if (ogImage) {
-            htmlParts.push('  <meta property="twitter:image" content="' + ogImage + '">');
-          }
-        }
-        
-        // 新增功能: 主題色彩
-        if (includeThemeColor) {
-          htmlParts.push('  <meta name="theme-color" content="' + themeColor + '">');
-        }
-      }
-      
-      // 新增功能: Web App Manifest
-      if (includeManifest) {
-        htmlParts.push('  <link rel="manifest" href="manifest.json">');
-        
-        // 生成manifest.json文件內容的註釋
-        htmlParts.push('  <!-- 建議創建以下manifest.json文件:');
-        htmlParts.push('  {');
-        htmlParts.push('    "name": "' + appName + '",');
-        htmlParts.push('    "short_name": "' + appName + '",');
-        htmlParts.push('    "start_url": ".",');
-        htmlParts.push('    "display": "standalone",');
-        htmlParts.push('    "background_color": "#ffffff",');
-        htmlParts.push('    "theme_color": "' + manifestColor + '",');
-        htmlParts.push('    "icons": [');
-        htmlParts.push('      {');
-        htmlParts.push('        "src": "icon-192x192.png",');
-        htmlParts.push('        "sizes": "192x192",');
-        htmlParts.push('        "type": "image/png"');
-        htmlParts.push('      },');
-        htmlParts.push('      {');
-        htmlParts.push('        "src": "icon-512x512.png",');
-        htmlParts.push('        "sizes": "512x512",');
-        htmlParts.push('        "type": "image/png"');
-        htmlParts.push('      }');
-        htmlParts.push('    ]');
-        htmlParts.push('  }');
-        htmlParts.push('  -->');
-      }
-      
-      // 新增功能: Favicons
-      if (includeFavicons) {
-        htmlParts.push('  <!-- Favicons -->');
-        htmlParts.push('  <link rel="icon" href="favicon.ico">');
-        htmlParts.push('  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">');
-        htmlParts.push('  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">');
-        htmlParts.push('  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">');
-        htmlParts.push('  <link rel="mask-icon" href="safari-pinned-tab.svg" color="' + themeColor + '">');
-        htmlParts.push('  <meta name="msapplication-TileColor" content="' + themeColor + '">');
-      }
-      
-      // 標題
-      if (includeTitle) {
-        htmlParts.push('  <title>' + pageTitle + '</title>');
-      }
-      
-      // CSS框架
-      if (cssFramework === 'bootstrap') {
-        htmlParts.push('  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">');
-      } else if (cssFramework === 'tailwind') {
-        htmlParts.push('  <script src="https://cdn.tailwindcss.com"></script>');
-      }
-      
-      // 新增功能: Modern Normalize CSS
-      if (includeNormalize) {
-        htmlParts.push('  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/modern-normalize@2.0.0/modern-normalize.min.css">');
-      }
-      
-      // CSS連結
-      if (includeCssLink && cssFile) {
-        if (!cssFile.startsWith('http') && !cssFile.startsWith('//')) {
-          htmlParts.push('  <!-- 注意: 以下樣式文件在預覽中可能不存在 -->');
-          htmlParts.push('  <link rel="stylesheet" href="' + cssFile + '">');
-        } else {
-          htmlParts.push('  <link rel="stylesheet" href="' + cssFile + '">');
-        }
-      }
+    htmlParts.push('  <meta charset="UTF-8">');
+    htmlParts.push('  <meta name="viewport" content="width=device-width, initial-scale=1.0">');
+    htmlParts.push('  <title>' + (document.getElementById('pageTitle').value || '我的網站') + '</title>');
+    
+    // 添加 CSS
+    htmlParts.push('  <style>');
+    htmlParts.push('    /* 基本樣式 */');
+    htmlParts.push('    :root {');
+    htmlParts.push('      --primary-color: #4CAF50;');
+    htmlParts.push('      --secondary-color: #2196F3;');
+    htmlParts.push('      --text-color: #333;');
+    htmlParts.push('      --bg-color: #fff;');
+    htmlParts.push('      --border-color: #ddd;');
+    htmlParts.push('      --border-radius: 4px;');
+    htmlParts.push('      --spacing: 20px;');
+    htmlParts.push('    }');
+    
+    htmlParts.push('    * {');
+    htmlParts.push('      box-sizing: border-box;');
+    htmlParts.push('      margin: 0;');
+    htmlParts.push('      padding: 0;');
+    htmlParts.push('    }');
+    
+    htmlParts.push('    body {');
+    htmlParts.push('      font-family: "Noto Sans TC", sans-serif;');
+    htmlParts.push('      line-height: 1.6;');
+    htmlParts.push('      color: var(--text-color);');
+    htmlParts.push('      background-color: var(--bg-color);');
+    htmlParts.push('    }');
       
       // 添加自定義 CSS
-      if (customCSS && customCSS.trim() !== '' && customCSS !== '// 在此編輯CSS代碼...') {
-        const cssLines = customCSS.split('\n');
-        htmlParts.push('  <!-- 自定義 CSS -->');
-        htmlParts.push('  <style id="customCssStyle">');
-        for (let i = 0; i < cssLines.length; i++) {
-          htmlParts.push('    ' + cssLines[i]);
-        }
-        htmlParts.push('  </style>');
-      }
-      
-      // 新增功能: 頁面淡入效果CSS
-      if (includeFadeIn || includeFadeInAfterLoad) {
-        htmlParts.push('  <style id="fade-in-styles">');
-        if (includeFadeIn) {
-          htmlParts.push('    body {');
-          htmlParts.push('      opacity: 0;');
-          htmlParts.push('      transition: opacity 0.5s ease;');
+    if (customCSS) {
+      htmlParts.push('    /* 自定義樣式 */');
+      htmlParts.push(customCSS);
+    }
+    
+    // 添加畫布內容的樣式
+    htmlParts.push('    /* 畫布內容樣式 */');
+    htmlParts.push('    .page-content {');
+    htmlParts.push('      position: relative;');
+    htmlParts.push('      width: 100%;');
+    htmlParts.push('      min-height: 100vh;');
+    htmlParts.push('      padding: var(--spacing);');
           htmlParts.push('    }');
-          htmlParts.push('    body.fade-in {');
-          htmlParts.push('      opacity: 1;');
-          htmlParts.push('    }');
-        } else if (includeFadeInAfterLoad) {
-          htmlParts.push('    body {');
-          htmlParts.push('      opacity: 0;');
-          htmlParts.push('    }');
-          htmlParts.push('    body.loaded {');
-          htmlParts.push('      opacity: 1;');
-          htmlParts.push('      transition: opacity 0.8s ease;');
-          htmlParts.push('    }');
-        }
-        htmlParts.push('  </style>');
-      }
-      
-      // 添加基本樣式，確保預覽效果更好
-      htmlParts.push('  <style>');
-      htmlParts.push('    body {');
-      htmlParts.push('      font-family: Arial, sans-serif;');
-      htmlParts.push('      line-height: 1.6;');
-      htmlParts.push('      margin: 0;');
-      htmlParts.push('      padding: 20px;');
-      htmlParts.push('    }');
-      
-      // 如果使用自定義布局而非框架，添加必要的樣式
-      if (cssFramework === 'none') {
-        if (layoutTemplate === 'two' || layoutTemplate === 'three') {
+    
+    // 添加常用元素的樣式
+    htmlParts.push('    /* 常用元素樣式 */');
           htmlParts.push('    .container {');
           htmlParts.push('      max-width: 1200px;');
           htmlParts.push('      margin: 0 auto;');
-          htmlParts.push('    }');
-          htmlParts.push('    .row {');
-          htmlParts.push('      display: flex;');
-          htmlParts.push('      flex-wrap: wrap;');
-          htmlParts.push('      margin: 0 -15px;');
+    htmlParts.push('      padding: 0 var(--spacing);');
           htmlParts.push('    }');
           
-          if (layoutTemplate === 'two') {
-            htmlParts.push('    .col-md-8 {');
-            htmlParts.push('      flex: 0 0 66.666667%;');
-            htmlParts.push('      max-width: 66.666667%;');
-            htmlParts.push('      padding: 0 15px;');
+    htmlParts.push('    .section {');
+    htmlParts.push('      margin: var(--spacing) 0;');
+    htmlParts.push('      padding: var(--spacing);');
+    htmlParts.push('      border: 1px solid var(--border-color);');
+    htmlParts.push('      border-radius: var(--border-radius);');
             htmlParts.push('    }');
-            htmlParts.push('    .col-md-4 {');
-            htmlParts.push('      flex: 0 0 33.333333%;');
-            htmlParts.push('      max-width: 33.333333%;');
-            htmlParts.push('      padding: 0 15px;');
-            htmlParts.push('    }');
-          } else if (layoutTemplate === 'three') {
-            htmlParts.push('    .col-md-3 {');
-            htmlParts.push('      flex: 0 0 25%;');
-            htmlParts.push('      max-width: 25%;');
-            htmlParts.push('      padding: 0 15px;');
-            htmlParts.push('    }');
-            htmlParts.push('    .col-md-6 {');
-            htmlParts.push('      flex: 0 0 50%;');
-            htmlParts.push('      max-width: 50%;');
-            htmlParts.push('      padding: 0 15px;');
-            htmlParts.push('    }');
-          }
-        }
-      }
-      
-      // 新增功能: 公告欄
-      if (includeAnnouncementBar) {
-        htmlParts.push('    .announcement-bar {');
-        htmlParts.push('      background-color: #ff9800;');
+    
+    htmlParts.push('    .button {');
+    htmlParts.push('      display: inline-block;');
+    htmlParts.push('      padding: 8px 16px;');
+    htmlParts.push('      background-color: var(--primary-color);');
         htmlParts.push('      color: white;');
-        htmlParts.push('      text-align: center;');
-        htmlParts.push('      padding: 10px;');
-        htmlParts.push('      font-weight: bold;');
-        htmlParts.push('    }');
-      }
-      
-      // 新增功能: 舊瀏覽器升級提示
-      if (includeUpgradeMessage) {
-        htmlParts.push('    .browser-upgrade {');
-        htmlParts.push('      background: #f44336;');
-        htmlParts.push('      color: white;');
-        htmlParts.push('      padding: 10px;');
-        htmlParts.push('      text-align: center;');
-        htmlParts.push('    }');
-        htmlParts.push('    .browser-upgrade a {');
-        htmlParts.push('      color: white;');
-        htmlParts.push('      text-decoration: underline;');
-        htmlParts.push('    }');
-      }
-      
-      // 新增功能: Cookie通知
-      if (includeCookieNotice) {
-        htmlParts.push('    .cookie-notice {');
-        htmlParts.push('      position: fixed;');
-        htmlParts.push('      bottom: 0;');
-        htmlParts.push('      left: 0;');
-        htmlParts.push('      right: 0;');
-        htmlParts.push('      background: rgba(0, 0, 0, 0.85);');
-        htmlParts.push('      color: white;');
-        htmlParts.push('      padding: 15px;');
-        htmlParts.push('      border-radius: 4px;');
-        htmlParts.push('      cursor: pointer;');
-        htmlParts.push('    }');
-        htmlParts.push('    .cookie-notice button {');
-        htmlParts.push('      background: white;');
-        htmlParts.push('      color: black;');
         htmlParts.push('      border: none;');
-        htmlParts.push('      padding: 10px 15px;');
-        htmlParts.push('      border-radius: 4px;');
+    htmlParts.push('      border-radius: var(--border-radius);');
         htmlParts.push('      cursor: pointer;');
+    htmlParts.push('      text-decoration: none;');
+    htmlParts.push('      transition: background-color 0.3s;');
         htmlParts.push('    }');
-      }
+    
+    htmlParts.push('    .button:hover {');
+    htmlParts.push('      background-color: var(--secondary-color);');
+        htmlParts.push('    }');
+    
+    htmlParts.push('    .form-group {');
+    htmlParts.push('      margin-bottom: var(--spacing);');
+        htmlParts.push('    }');
+    
+    htmlParts.push('    .form-control {');
+    htmlParts.push('      width: 100%;');
+    htmlParts.push('      padding: 8px;');
+    htmlParts.push('      border: 1px solid var(--border-color);');
+    htmlParts.push('      border-radius: var(--border-radius);');
+        htmlParts.push('    }');
       
-      // 添加組件樣式
-      if (includeHeader) {
-        htmlParts.push('    header {');
-        htmlParts.push('      background-color: #f8f9fa;');
-        htmlParts.push('      padding: 20px;');
-        htmlParts.push('      margin-bottom: 20px;');
-        htmlParts.push('      border-radius: 5px;');
-        htmlParts.push('    }');
-      }
-      
-      if (includeNavbar && !includeBootstrapNavbar) {
-        htmlParts.push('    nav ul {');
-        htmlParts.push('      list-style: none;');
-        htmlParts.push('      padding: 0;');
-        htmlParts.push('      display: flex;');
-        htmlParts.push('      gap: 20px;');
-        htmlParts.push('    }');
-        htmlParts.push('    nav li {');
-        htmlParts.push('      margin: 0;');
-        htmlParts.push('    }');
-        htmlParts.push('    nav a {');
-        htmlParts.push('      text-decoration: none;');
-        htmlParts.push('      color: #0366d6;');
-        htmlParts.push('    }');
-      }
-      
-      if (includeHero) {
-        htmlParts.push('    .hero {');
-        htmlParts.push('      background-color: #e9ecef;');
-        htmlParts.push('      padding: 40px 20px;');
-        htmlParts.push('      text-align: center;');
-        htmlParts.push('      border-radius: 5px;');
-        htmlParts.push('      margin-bottom: 20px;');
-        htmlParts.push('    }');
-      }
-      
-      if (includeCard) {
         htmlParts.push('    .card {');
-        htmlParts.push('      border: 1px solid #ddd;');
-        htmlParts.push('      border-radius: 5px;');
-        htmlParts.push('      padding: 20px;');
-        htmlParts.push('      margin-bottom: 20px;');
-        htmlParts.push('      box-shadow: 0 2px 4px rgba(0,0,0,0.1);');
+    htmlParts.push('      border: 1px solid var(--border-color);');
+    htmlParts.push('      border-radius: var(--border-radius);');
+    htmlParts.push('      padding: var(--spacing);');
+    htmlParts.push('      margin-bottom: var(--spacing);');
         htmlParts.push('    }');
-      }
-      
-      // 新增功能: 表格樣式
-      if (includeTable) {
-        htmlParts.push('    table {');
-        htmlParts.push('      width: 100%;');
-        htmlParts.push('      border-collapse: collapse;');
-        htmlParts.push('      margin-bottom: 20px;');
+    
+    htmlParts.push('    .card-title {');
+    htmlParts.push('      margin-bottom: 10px;');
+    htmlParts.push('      color: var(--primary-color);');
         htmlParts.push('    }');
-        htmlParts.push('    th, td {');
-        htmlParts.push('      padding: 12px 15px;');
-        htmlParts.push('      text-align: left;');
-        htmlParts.push('      border-bottom: 1px solid #ddd;');
+    
+    htmlParts.push('    .card-content {');
+    htmlParts.push('      color: var(--text-color);');
         htmlParts.push('    }');
-        htmlParts.push('    th {');
-        htmlParts.push('      background-color: #f8f9fa;');
-        htmlParts.push('      font-weight: bold;');
-        htmlParts.push('    }');
-        htmlParts.push('    tr:hover {');
-        htmlParts.push('      background-color: #f5f5f5;');
-        htmlParts.push('    }');
-        htmlParts.push('    @media screen and (max-width: 768px) {');
-        htmlParts.push('      table {');
-        htmlParts.push('        display: block;');
-        htmlParts.push('        overflow-x: auto;');
-        htmlParts.push('      }');
-        htmlParts.push('    }');
-      }
-      
-      if (includeForm) {
-        htmlParts.push('    form {');
-        htmlParts.push('      max-width: 500px;');
-        htmlParts.push('    }');
-        htmlParts.push('    .form-group {');
-        htmlParts.push('      margin-bottom: 15px;');
-        htmlParts.push('    }');
-        htmlParts.push('    form label {');
-        htmlParts.push('      display: block;');
-        htmlParts.push('      margin-bottom: 5px;');
-        htmlParts.push('    }');
-        htmlParts.push('    form input, form textarea {');
-        htmlParts.push('      width: 100%;');
-        htmlParts.push('      padding: 8px;');
-        htmlParts.push('      border: 1px solid #ddd;');
-        htmlParts.push('      border-radius: 4px;');
-        htmlParts.push('    }');
-        htmlParts.push('    form button {');
-        htmlParts.push('      background-color: #0366d6;');
-        htmlParts.push('      color: white;');
-        htmlParts.push('      border: none;');
-        htmlParts.push('      padding: 10px 15px');
-        htmlParts.push('      border-radius: 4px;');
-        htmlParts.push('      cursor: pointer;');
-        htmlParts.push('    }');
-      }
-      
-      if (includeFooter) {
-        htmlParts.push('    footer {');
-        htmlParts.push('      background-color: #f8f9fa;');
-        htmlParts.push('      padding: 20px;');
-        htmlParts.push('      margin-top: 20px;');
-        htmlParts.push('      text-align: center;');
-        htmlParts.push('      border-radius: 5px;');
-        htmlParts.push('    }');
-      }
-      
-      // 新增功能: 彩蛋(Trollface)的樣式
-      if (includeTrollface) {
-        // 紅色方塊的BASE64編碼 - 繁體中文
-        const redSquare = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2ZmMDAwMCIvPjwvc3ZnPg==";
-        const easterEggImageUrl = customEasterEggImage || redSquare;
-        htmlParts.push('    .trollface-easter-egg {');
-        htmlParts.push('      display: none;');
-        htmlParts.push('      position: fixed;');
-        htmlParts.push('      bottom: 20px;');
-        htmlParts.push('      right: 20px;');
-        htmlParts.push('      width: 100px;');
-        htmlParts.push('      height: 100px;');
-        htmlParts.push('      background-image: url("' + easterEggImageUrl + '");');
-        htmlParts.push('      background-size: contain;');
-        htmlParts.push('      z-index: 9999;');
-        htmlParts.push('      cursor: pointer;');
-        htmlParts.push('    }');
-      }
-      
-      htmlParts.push('  </style>');
+    
+    htmlParts.push('  </style>');
+    
+    // 添加外部 CSS 文件
+    if (document.getElementById('includeCssLink').checked) {
+      const cssFile = document.getElementById('cssFile').value || 'style.css';
+      htmlParts.push('  <link rel="stylesheet" href="' + cssFile + '">');
+    }
+    
+    // 添加外部字體
+    htmlParts.push('  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">');
       
       htmlParts.push('</head>');
       
-      // 新增功能: 為頁面淡入效果添加類名
-      if (includeFadeIn) {
-        htmlParts.push('<body class="fade-in">');
-      } else if (includeFadeInAfterLoad) {
+    // 添加 body 部分
         htmlParts.push('<body>');
-      } else {
-        htmlParts.push('<body>');
-      }
-      
-      // 新增功能: 舊瀏覽器升級提示
-      if (includeUpgradeMessage) {
-        htmlParts.push('  <!--[if lt IE 11]>');
-        htmlParts.push('    <div class="browser-upgrade">');
-        htmlParts.push('      <p>您正在使用<strong>過時的</strong>瀏覽器。請<a href="https://browsehappy.com/">升級您的瀏覽器</a>以獲得更好的體驗。</p>');
-        htmlParts.push('    </div>');
-        htmlParts.push('  <![endif]-->');
-      }
-      
-      // 新增功能: 公告欄
-      if (includeAnnouncementBar) {
-        htmlParts.push('  <div class="announcement-bar">');
-        htmlParts.push('    ' + announcementText);
-        htmlParts.push('  </div>');
-      }
-      
-      // 添加Header區域
-      if (includeHeader) {
-        htmlParts.push('  <header>');
-        
-        // 添加導航欄
-        if (includeNavbar) {
-          if (includeBootstrapNavbar && cssFramework === 'bootstrap') {
-            // Bootstrap導航欄
-            htmlParts.push('    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">');
-            htmlParts.push('      <div class="container-fluid">');
-            htmlParts.push('        <a class="navbar-brand" href="#">' + pageTitle + '</a>');
-            htmlParts.push('        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">');
-            htmlParts.push('          <span class="navbar-toggler-icon"></span>');
-            htmlParts.push('        </button>');
-            htmlParts.push('        <div class="collapse navbar-collapse" id="navbarNav">');
-            htmlParts.push('          <ul class="navbar-nav">');
-            htmlParts.push('            <li class="nav-item">');
-            htmlParts.push('              <a class="nav-link active" aria-current="page" href="#">首頁</a>');
-            htmlParts.push('            </li>');
-            htmlParts.push('            <li class="nav-item">');
-            htmlParts.push('              <a class="nav-link" href="#">關於我們</a>');
-            htmlParts.push('            </li>');
-            htmlParts.push('            <li class="nav-item">');
-            htmlParts.push('              <a class="nav-link" href="#">服務</a>');
-            htmlParts.push('            </li>');
-            htmlParts.push('            <li class="nav-item">');
-            htmlParts.push('              <a class="nav-link" href="#">聯絡我們</a>');
-            htmlParts.push('            </li>');
-            htmlParts.push('          </ul>');
-            htmlParts.push('        </div>');
-            htmlParts.push('      </div>');
-            htmlParts.push('    </nav>');
-          } else {
-            // 一般導航欄
-            htmlParts.push('    <nav>');
-            htmlParts.push('      <ul>');
-            htmlParts.push('        <li><a href="#">首頁</a></li>');
-            htmlParts.push('        <li><a href="#">關於我們</a></li>');
-            htmlParts.push('        <li><a href="#">服務</a></li>');
-            htmlParts.push('        <li><a href="#">聯絡我們</a></li>');
-            htmlParts.push('      </ul>');
-            htmlParts.push('    </nav>');
-          }
-        }
-        
-        // 添加Hero區塊
-        if (includeHero) {
-          htmlParts.push('    <div class="hero">');
-          htmlParts.push('      <h1>' + pageTitle + '</h1>');
-          htmlParts.push('      <p>歡迎來到我的網站</p>');
-          htmlParts.push('    </div>');
-        }
-        
-        htmlParts.push('  </header>');
-      }
-      
-      // 根據佈局模板添加內容
-      if (layoutTemplate === 'single') {
-        // 單欄佈局
-        if (includeMain) {
-          htmlParts.push('  <main class="' + (cssFramework === 'bootstrap' ? 'container' : '') + '">');
-          htmlParts.push('    <section>');
-          htmlParts.push('      <h2>歡迎來到' + pageTitle + '</h2>');
-          
-          // 新增功能: 假文本
-          if (includeDummyText) {
-            htmlParts.push('      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam eget felis eget nunc lobortis mattis aliquam faucibus. Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>');
-            htmlParts.push('      <p>Proin eget tortor risus. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Quisque velit nisi, pretium ut lacinia in, elementum id enim. Proin eget tortor risus. Cras ultricies ligula sed magna dictum porta. Pellentesque in ipsum id orci porta dapibus.</p>');
-          } else {
-            htmlParts.push('      <p>這是網站的主要內容區域。</p>');
-          }
-          
-          // 新增功能: 基本HTML5標籤展示
-          if (includeBasicHTML5Tags) {
-            htmlParts.push('      <div class="html5-tags-demo">');
-            htmlParts.push('        <h3>HTML5 語義化標籤示例</h3>');
-            htmlParts.push('        <article>');
-            htmlParts.push('          <h4>文章標題</h4>');
-            htmlParts.push('          <p>這是一個 <mark>article</mark> 元素，用於表示獨立的內容區塊。</p>');
-            htmlParts.push('          <figure>');
-            htmlParts.push('            <figcaption>圖表說明 (figcaption 元素)</figcaption>');
-            htmlParts.push('            <p>這是一個 <mark>figure</mark> 元素的內容。</p>');
-            htmlParts.push('          </figure>');
-            htmlParts.push('        </article>');
-            htmlParts.push('        <details>');
-            htmlParts.push('          <summary>詳細資訊 (點擊展開)</summary>');
-            htmlParts.push('          <p>這是使用 details 和 summary 元素創建的可展開內容。</p>');
-            htmlParts.push('        </details>');
-            htmlParts.push('        <p>其他語義化元素還包括: <mark>section</mark>, <mark>nav</mark>, <mark>aside</mark>, <mark>header</mark>, <mark>footer</mark> 等。</p>');
-            htmlParts.push('      </div>');
-          }
-          
-          // 新增功能: 表格
-          if (includeTable) {
-            htmlParts.push('      <h3>資料表格</h3>');
-            htmlParts.push('      <table>');
-            htmlParts.push('        <thead>');
-            htmlParts.push('          <tr>');
-            htmlParts.push('            <th>#</th>');
-            htmlParts.push('            <th>姓名</th>');
-            htmlParts.push('            <th>電子郵件</th>');
-            htmlParts.push('            <th>角色</th>');
-            htmlParts.push('          </tr>');
-            htmlParts.push('        </thead>');
-            htmlParts.push('        <tbody>');
-            htmlParts.push('          <tr>');
-            htmlParts.push('            <td>1</td>');
-            htmlParts.push('            <td>王小明</td>');
-            htmlParts.push('            <td>ming@example.com</td>');
-            htmlParts.push('            <td>管理員</td>');
-            htmlParts.push('          </tr>');
-            htmlParts.push('          <tr>');
-            htmlParts.push('            <td>2</td>');
-            htmlParts.push('            <td>李小華</td>');
-            htmlParts.push('            <td>hua@example.com</td>');
-            htmlParts.push('            <td>編輯</td>');
-            htmlParts.push('          </tr>');
-            htmlParts.push('          <tr>');
-            htmlParts.push('            <td>3</td>');
-            htmlParts.push('            <td>張小芳</td>');
-            htmlParts.push('            <td>fang@example.com</td>');
-            htmlParts.push('            <td>用戶</td>');
-            htmlParts.push('          </tr>');
-            htmlParts.push('        </tbody>');
-            htmlParts.push('      </table>');
-          }
-          
-          // 新增功能: 輪播 (Bootstrap)
-          if (includeCarousel && cssFramework === 'bootstrap') {
-            htmlParts.push('      <h3>圖片輪播</h3>');
-            htmlParts.push('      <div id="carouselExample" class="carousel slide mb-4" data-bs-ride="carousel">');
-            htmlParts.push('        <div class="carousel-indicators">');
-            htmlParts.push('          <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>');
-            htmlParts.push('          <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1" aria-label="Slide 2"></button>');
-            htmlParts.push('          <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="2" aria-label="Slide 3"></button>');
-            htmlParts.push('        </div>');
-            htmlParts.push('        <div class="carousel-inner">');
-            htmlParts.push('          <div class="carousel-item active">');
-            
-            // 假圖片或佔位符
-            if (includeDummyImages) {
-              // 藍色方塊的BASE64編碼 - 繁體中文
-              const blueSquare = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iIzAwNjZjYyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMzAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPuWclueJh+WIl+WLlSAxPC90ZXh0Pjwvc3ZnPg==";
-              htmlParts.push('            <img src="' + blueSquare + '" class="d-block w-100" alt="Slide 1">');
-            } else {
-              htmlParts.push('            <div style="background: #777; height: 400px; display: flex; align-items: center; justify-content: center;">');
-              htmlParts.push('              <h5 style="color: white;">圖片區塊 1</h5>');
-              htmlParts.push('            </div>');
-            }
-            
-            htmlParts.push('            <div class="carousel-caption d-none d-md-block">');
-            htmlParts.push('              <h5>第一張幻燈片</h5>');
-            htmlParts.push('              <p>這是第一張幻燈片的描述文字。</p>');
-            htmlParts.push('            </div>');
-            htmlParts.push('          </div>');
-            htmlParts.push('          <div class="carousel-item">');
-            
-            if (includeDummyImages) {
-              // 綠色方塊的BASE64編碼 - 繁體中文
-              const greenSquare = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iIzAwOTkzMyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMzAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPuWclueJh+WIl+WLlSAyPC90ZXh0Pjwvc3ZnPg==";
-              htmlParts.push('            <img src="' + greenSquare + '" class="d-block w-100" alt="Slide 2">');
-            } else {
-              htmlParts.push('            <div style="background: #777; height: 400px; display: flex; align-items: center; justify-content: center;">');
-              htmlParts.push('              <h5 style="color: white;">圖片區塊 2</h5>');
-              htmlParts.push('            </div>');
-            }
-            
-            htmlParts.push('            <div class="carousel-caption d-none d-md-block">');
-            htmlParts.push('              <h5>第二張幻燈片</h5>');
-            htmlParts.push('              <p>這是第二張幻燈片的描述文字。</p>');
-            htmlParts.push('            </div>');
-            htmlParts.push('          </div>');
-            htmlParts.push('          <div class="carousel-item">');
-            
-            if (includeDummyImages) {
-              // 黃色方塊的BASE64編碼 - 繁體中文
-              const yellowSquare = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNDAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2ZmY2MwMCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMzAiIGZpbGw9IiMwMDAwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPuWclueJh+WIl+WLlSAzPC90ZXh0Pjwvc3ZnPg==";
-              htmlParts.push('            <img src="' + yellowSquare + '" class="d-block w-100" alt="Slide 3">');
-            } else {
-              htmlParts.push('            <div style="background: #777; height: 400px; display: flex; align-items: center; justify-content: center;">');
-              htmlParts.push('              <h5 style="color: white;">圖片區塊 3</h5>');
-              htmlParts.push('            </div>');
-            }
-            
-            htmlParts.push('            <div class="carousel-caption d-none d-md-block">');
-            htmlParts.push('              <h5>第三張幻燈片</h5>');
-            htmlParts.push('              <p>這是第三張幻燈片的描述文字。</p>');
-            htmlParts.push('            </div>');
-            htmlParts.push('          </div>');
-            htmlParts.push('        </div>');
-            htmlParts.push('        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">');
-            htmlParts.push('          <span class="carousel-control-prev-icon" aria-hidden="true"></span>');
-            htmlParts.push('          <span class="visually-hidden">Previous</span>');
-            htmlParts.push('        </button>');
-            htmlParts.push('        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">');
-            htmlParts.push('          <span class="carousel-control-next-icon" aria-hidden="true"></span>');
-            htmlParts.push('          <span class="visually-hidden">Next</span>');
-            htmlParts.push('        </button>');
-            htmlParts.push('      </div>');
-          }
-          
-          // 新增功能: 折疊面板 (Accordion)
-          if (includeAccordion && cssFramework === 'bootstrap') {
-            htmlParts.push('      <h3>折疊面板</h3>');
-            htmlParts.push('      <div class="accordion mb-4" id="accordionExample">');
-            htmlParts.push('        <div class="accordion-item">');
-            htmlParts.push('          <h2 class="accordion-header">');
-            htmlParts.push('            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">');
-            htmlParts.push('              折疊面板 #1');
-            htmlParts.push('            </button>');
-            htmlParts.push('          </h2>');
-            htmlParts.push('          <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">');
-            htmlParts.push('            <div class="accordion-body">');
-            if (includeDummyText) {
-              htmlParts.push('              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum malesuada felis sed massa faucibus, at gravida massa efficitur. Ut auctor mi sit amet neque tincidunt efficitur.</p>');
-            } else {
-              htmlParts.push('              <p>這是第一個折疊面板的內容。點擊標題可以展開或收起此內容。</p>');
-            }
-            htmlParts.push('            </div>');
-            htmlParts.push('          </div>');
-            htmlParts.push('        </div>');
-            htmlParts.push('        <div class="accordion-item">');
-            htmlParts.push('          <h2 class="accordion-header">');
-            htmlParts.push('            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">');
-            htmlParts.push('              折疊面板 #2');
-            htmlParts.push('            </button>');
-            htmlParts.push('          </h2>');
-            htmlParts.push('          <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">');
-            htmlParts.push('            <div class="accordion-body">');
-            if (includeDummyText) {
-              htmlParts.push('              <p>Nulla facilisi. Praesent euismod urna ac sapien facilisis, at blandit dui dictum. Fusce aliquam interdum libero, vel hendrerit sapien.</p>');
-            } else {
-              htmlParts.push('              <p>這是第二個折疊面板的內容。點擊標題可以展開或收起此內容。</p>');
-            }
-            htmlParts.push('            </div>');
-            htmlParts.push('          </div>');
-            htmlParts.push('        </div>');
-            htmlParts.push('        <div class="accordion-item">');
-            htmlParts.push('          <h2 class="accordion-header">');
-            htmlParts.push('            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">');
-            htmlParts.push('              折疊面板 #3');
-            htmlParts.push('            </button>');
-            htmlParts.push('          </h2>');
-            htmlParts.push('          <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">');
-            htmlParts.push('            <div class="accordion-body">');
-            if (includeDummyText) {
-              htmlParts.push('              <p>Etiam non magna sed arcu euismod feugiat. Donec euismod, nisl vel tincidunt lacinia, nunc elit ultrices nunc, vel tincidunt magna nunc vel magna.</p>');
-            } else {
-              htmlParts.push('              <p>這是第三個折疊面板的內容。點擊標題可以展開或收起此內容。</p>');
-            }
-            htmlParts.push('            </div>');
-            htmlParts.push('          </div>');
-            htmlParts.push('        </div>');
-            htmlParts.push('      </div>');
-          }
-          
-          // 添加卡片組件
-          if (includeCard) {
-            if (cssFramework === 'bootstrap') {
-              htmlParts.push('      <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">');
-              for (let i = 1; i <= 3; i++) {
-                htmlParts.push('        <div class="col">');
-                htmlParts.push('          <div class="card h-100">');
-                if (includeDummyImages) {
-                  // 紫色方塊的BASE64編碼 - 繁體中文
-                  const purpleSquare = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzY2MzM5OSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPuWclueJh+aWh+Wtl+WIl+WLlTwvdGV4dD48L3N2Zz4=";
-                  htmlParts.push('            <img src="' + purpleSquare + '" class="card-img-top" alt="Card image">');
-                } else {
-                  htmlParts.push('            <div style="background: #777; height: 400px; display: flex; align-items: center; justify-content: center;">');
-                  htmlParts.push('              <h5 style="color: white;">圖片位置</h5>');
-                  htmlParts.push('            </div>');
-                }
-                htmlParts.push('            <div class="card-body">');
-                htmlParts.push('              <h5 class="card-title">卡片標題 ' + i + '</h5>');
-                if (includeDummyText) {
-                  htmlParts.push('              <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec diam placerat, aliquam est et, porta urna.</p>');
-                } else {
-                  htmlParts.push('              <p class="card-text">這是卡片 ' + i + ' 的內容描述。</p>');
-                }
-                htmlParts.push('              <a href="#" class="btn btn-primary">了解更多</a>');
-                htmlParts.push('            </div>');
-                htmlParts.push('          </div>');
-                htmlParts.push('        </div>');
-              }
-              htmlParts.push('      </div>');
-            } else {
-              htmlParts.push('      <div class="card">');
-              htmlParts.push('        <h3>卡片標題</h3>');
-              if (includeDummyText) {
-                htmlParts.push('        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec diam placerat, aliquam est et, porta urna.</p>');
-              } else {
-                htmlParts.push('        <p>卡片內容</p>');
-              }
-              htmlParts.push('      </div>');
-            }
-          }
-          
-          // 添加表單組件
-          if (includeForm) {
-            if (cssFramework === 'bootstrap') {
-              htmlParts.push('      <h3>聯絡表單</h3>');
-              htmlParts.push('      <form class="mb-4">');
-              htmlParts.push('        <div class="mb-3">');
-              htmlParts.push('          <label for="name" class="form-label">姓名</label>');
-              htmlParts.push('          <input type="text" class="form-control" id="name" required>');
-              htmlParts.push('        </div>');
-              htmlParts.push('        <div class="mb-3">');
-              htmlParts.push('          <label for="email" class="form-label">電子郵件</label>');
-              htmlParts.push('          <input type="email" class="form-control" id="email" required>');
-              htmlParts.push('        </div>');
-              htmlParts.push('        <div class="mb-3">');
-              htmlParts.push('          <label for="message" class="form-label">訊息</label>');
-              htmlParts.push('          <textarea class="form-control" id="message" rows="4" required></textarea>');
-              htmlParts.push('        </div>');
-              htmlParts.push('        <button type="submit" class="btn btn-primary">送出</button>');
-              htmlParts.push('      </form>');
-            } else {
-              htmlParts.push('      <form>');
-              htmlParts.push('        <div class="form-group">');
-              htmlParts.push('          <label for="name">姓名：</label>');
-              htmlParts.push('          <input type="text" id="name" name="name" required>');
-              htmlParts.push('        </div>');
-              htmlParts.push('        <div class="form-group">');
-              htmlParts.push('          <label for="email">電子郵件：</label>');
-              htmlParts.push('          <input type="email" id="email" name="email" required>');
-              htmlParts.push('        </div>');
-              htmlParts.push('        <div class="form-group">');
-              htmlParts.push('          <label for="message">訊息：</label>');
-              htmlParts.push('          <textarea id="message" name="message" rows="4" required></textarea>');
-              htmlParts.push('        </div>');
-              htmlParts.push('        <button type="submit">提交</button>');
-              htmlParts.push('      </form>');
-            }
-          }
-          
-          htmlParts.push('    </section>');
-          htmlParts.push('  </main>');
-        }
-      } else if (layoutTemplate === 'two') {
-        // 雙欄佈局
-        htmlParts.push('  <div class="container">');
-        htmlParts.push('    <div class="row">');
-        
-        if (includeMain) {
-          htmlParts.push('      <main class="col-md-8">');
-          htmlParts.push('        <section>');
-          htmlParts.push('          <h2>主要內容</h2>');
-          htmlParts.push('          <p>這是網站的主要內容區域。</p>');
-          
-          // 添加卡片或表單
-          if (includeCard) {
-            htmlParts.push('          <div class="card">');
-            htmlParts.push('            <h3>卡片標題</h3>');
-            htmlParts.push('            <p>卡片內容</p>');
-            htmlParts.push('          </div>');
-          }
-          
-          htmlParts.push('        </section>');
-          htmlParts.push('      </main>');
-        }
-        
-        if (includeAside) {
-          htmlParts.push('      <aside class="col-md-4">');
-          htmlParts.push('        <section>');
-          htmlParts.push('          <h2>側邊欄</h2>');
-          htmlParts.push('          <p>這是側邊欄區域。</p>');
-          
-          // 添加側邊欄組件
-          if (includeForm) {
-            htmlParts.push('          <form>');
-            htmlParts.push('            <div class="form-group">');
-            htmlParts.push('              <label for="search">搜尋：</label>');
-            htmlParts.push('              <input type="search" id="search" name="search">');
-            htmlParts.push('            </div>');
-            htmlParts.push('            <button type="submit">搜尋</button>');
-            htmlParts.push('          </form>');
-          }
-          
-          htmlParts.push('        </section>');
-          htmlParts.push('      </aside>');
-        }
-        
+    
+    // 添加畫布內容
+    htmlParts.push('  <div class="page-content">');
+    htmlParts.push('    <div class="container">');
+    htmlParts.push(canvasContent);
         htmlParts.push('    </div>');
         htmlParts.push('  </div>');
-      } else if (layoutTemplate === 'three') {
-        // 三欄佈局
-        htmlParts.push('  <div class="container">');
-        htmlParts.push('    <div class="row">');
-        
-        if (includeAside) {
-          htmlParts.push('      <aside class="col-md-3">');
-          htmlParts.push('        <section>');
-          htmlParts.push('          <h2>左側欄</h2>');
-          htmlParts.push('          <p>這是左側邊欄區域。</p>');
-          htmlParts.push('        </section>');
-          htmlParts.push('      </aside>');
-        }
-        
-        if (includeMain) {
-          htmlParts.push('      <main class="col-md-6">');
-          htmlParts.push('        <section>');
-          htmlParts.push('          <h2>主要內容</h2>');
-          htmlParts.push('          <p>這是網站的主要內容區域。</p>');
-          
-          // 添加卡片
-          if (includeCard) {
-            htmlParts.push('          <div class="card">');
-            htmlParts.push('            <h3>卡片標題</h3>');
-            htmlParts.push('            <p>卡片內容</p>');
-            htmlParts.push('          </div>');
-          }
-          
-          // 添加表單
-          if (includeForm) {
-            htmlParts.push('          <form>');
-            htmlParts.push('            <div class="form-group">');
-            htmlParts.push('              <label for="name">姓名：</label>');
-            htmlParts.push('              <input type="text" id="name" name="name" required>');
-            htmlParts.push('            </div>');
-            htmlParts.push('            <div class="form-group">');
-            htmlParts.push('              <label for="email">電子郵件：</label>');
-            htmlParts.push('              <input type="email" id="email" name="email" required>');
-            htmlParts.push('            </div>');
-            htmlParts.push('            <button type="submit">提交</button>');
-            htmlParts.push('          </form>');
-          }
-          
-          htmlParts.push('        </section>');
-          htmlParts.push('      </main>');
-        }
-        
-        if (includeAside) {
-          htmlParts.push('      <aside class="col-md-3">');
-          htmlParts.push('        <section>');
-          htmlParts.push('          <h2>右側欄</h2>');
-          htmlParts.push('          <p>這是右側邊欄區域。</p>');
-          htmlParts.push('        </section>');
-          htmlParts.push('      </aside>');
-        }
-        
-        htmlParts.push('    </div>'); // row 結束
-        htmlParts.push('  </div>'); // container 結束
-      }
-      
-      // 添加Footer區域
-      if (includeFooter) {
-        htmlParts.push('  <footer class="' + (cssFramework === 'bootstrap' ? 'mt-5 py-4 bg-light' : '') + '">');
-        htmlParts.push('    <div class="' + (cssFramework === 'bootstrap' ? 'container text-center' : '') + '">');
-        htmlParts.push('      <p>&copy; 2025 ' + pageTitle + '. 保留所有權利。</p>');
-        htmlParts.push('    </div>');
-        htmlParts.push('  </footer>');
-      }
-      
-      // 新增功能: Cookie通知
-      if (includeCookieNotice) {
-        htmlParts.push('  <div class="cookie-notice" id="cookieNotice">');
-        htmlParts.push('    <p>本網站使用Cookie以確保您獲得最佳的網站體驗。</p>');
-        htmlParts.push('    <button id="acceptCookies">接受</button>');
-        htmlParts.push('    <button id="declineCookies">拒絕</button>');
-        htmlParts.push('  </div>');
-      }
-      
-      // 新增功能: Trollface彩蛋
-      if (includeTrollface) {
-        const easterEggTitle = customEasterEggImage ? '自定義彩蛋' : 'Trollface彩蛋';
-        htmlParts.push('  <div class="trollface-easter-egg" id="trollfaceEgg" title="' + easterEggTitle + '"></div>');
-      }
-      
-      // 新增功能: jQuery
-      if (includeJQuery || (customJS && customJS.indexOf('jquery') > -1)) {
-        htmlParts.push('  <!-- jQuery -->');
-        htmlParts.push('  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>');
-      }
-      
-      // JavaScript框架
-      if (cssFramework === 'bootstrap') {
-        htmlParts.push('  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>');
-      }
-      
-      // 新增功能: Google Analytics
-      if (includeAnalytics && gaId) {
-        htmlParts.push('  <!-- Google Analytics -->');
-        htmlParts.push('  <script async src="https://www.googletagmanager.com/gtag/js?id=' + gaId + '"></script>');
+    
+    // 添加 JavaScript
+    if (document.getElementById('includeJsScript').checked) {
+      const jsFile = document.getElementById('jsFile').value || 'script.js';
+      htmlParts.push('  <script src="' + jsFile + '"></script>');
+    }
+    
+    // 添加自定義 JavaScript
+    if (customJS) {
         htmlParts.push('  <script>');
-        htmlParts.push('    window.dataLayer = window.dataLayer || [];');
-        htmlParts.push('    function gtag(){dataLayer.push(arguments);}');
-        htmlParts.push('    gtag(\'js\', new Date());');
-        htmlParts.push('    gtag(\'config\', \'' + gaId + '\');');
+      htmlParts.push(customJS);
         htmlParts.push('  </script>');
-      }
-      
-      // 各種特效和互動的JavaScript
-      const hasJsFeatures = includeFadeIn || includeFadeInAfterLoad || includeCookieNotice || includeTrollface;
-      
-      if (hasJsFeatures) {
-        htmlParts.push('  <script>');
-        
-        // 網頁載入後執行的代碼
-        htmlParts.push('    document.addEventListener("DOMContentLoaded", function() {');
-        
-        // 頁面淡入效果
-      if (includeFadeIn) {
-          htmlParts.push('      // 頁面淡入效果');
-          htmlParts.push('      setTimeout(function() {');
-          htmlParts.push('        document.body.classList.add("fade-in");');
-          htmlParts.push('      }, 100);');
-        }
-        
-        // Trollface彩蛋
-        if (includeTrollface) {
-          const triggerSequence = customEasterEggSequence || 'troll';
-          
-          htmlParts.push('      // 隱藏的彩蛋 - 按下鍵盤序列後顯示');
-          htmlParts.push('      let keySequence = "";');
-          htmlParts.push('      const targetSequence = "' + triggerSequence + '";');
-          htmlParts.push('      document.addEventListener("keydown", function(e) {');
-          htmlParts.push('        keySequence += e.key.toLowerCase();');
-          htmlParts.push('        if (keySequence.includes(targetSequence)) {');
-          htmlParts.push('          document.getElementById("trollfaceEgg").style.display = "block";');
-          htmlParts.push('          keySequence = "";');
-          htmlParts.push('        }');
-          htmlParts.push('        // 只保留最後' + (triggerSequence.length > 5 ? triggerSequence.length : 5) + '個按鍵');
-          htmlParts.push('        if (keySequence.length > ' + (triggerSequence.length > 5 ? triggerSequence.length : 5) + ') {');
-          htmlParts.push('          keySequence = keySequence.slice(-' + (triggerSequence.length > 5 ? triggerSequence.length : 5) + ');');
-          htmlParts.push('        }');
-          htmlParts.push('      });');
-          htmlParts.push('      // 點擊Trollface後隱藏');
-          htmlParts.push('      document.getElementById("trollfaceEgg").addEventListener("click", function() {');
-          htmlParts.push('        this.style.display = "none";');
-          htmlParts.push('      });');
-        }
-        
-        htmlParts.push('    });');
-        
-        // jQuery相關功能
-        if (includeJQuery) {
-          htmlParts.push('    $(document).ready(function() {');
-          
-          // 頁面完全加載後淡入
-          if (includeFadeInAfterLoad) {
-            htmlParts.push('      // 頁面完全加載後淡入');
-            htmlParts.push('      $(window).on("load", function() {');
-            htmlParts.push('        setTimeout(function() {');
-            htmlParts.push('          $("body").addClass("loaded");');
-            htmlParts.push('        }, 100);');
-            htmlParts.push('      });');
-          }
-          
-          // Cookie通知
-          if (includeCookieNotice) {
-            htmlParts.push('      // Cookie通知');
-            htmlParts.push('      if (!localStorage.getItem("cookiesAccepted")) {');
-            htmlParts.push('        $("#cookieNotice").show();');
-            htmlParts.push('      }');
-            htmlParts.push('      ');
-            htmlParts.push('      $("#acceptCookies").click(function() {');
-            htmlParts.push('        localStorage.setItem("cookiesAccepted", "true");');
-            htmlParts.push('        $("#cookieNotice").hide();');
-            htmlParts.push('      });');
-            htmlParts.push('      ');
-            htmlParts.push('      $("#declineCookies").click(function() {');
-            htmlParts.push('        localStorage.setItem("cookiesAccepted", "false");');
-            htmlParts.push('        $("#cookieNotice").hide();');
-            htmlParts.push('      });');
-          }
-          
-          htmlParts.push('    });');
-        }
-        
-        htmlParts.push('  </script>');
-      }
-      
-      // 添加 JS 依賴
-      if (customJS && customJS.indexOf('jquery') > -1 && !includeJQuery) {
-        htmlParts.push('  <!-- jQuery (由於自定義 JS 需要) -->');
-        htmlParts.push('  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>');
-      }
-      
-      // 在 body 結束前添加自定義 JS
-      if (customJS && customJS.trim() !== '' && customJS !== '// 在此編輯JavaScript代碼...') {
-        const jsLines = customJS.split('\n');
-        htmlParts.push('  <!-- 自定義 JavaScript -->');
-        htmlParts.push('  <script>');
-        for (let i = 0; i < jsLines.length; i++) {
-          htmlParts.push('    ' + jsLines[i]);
-        }
-        htmlParts.push('  </script>');
-      }
-      
-      // JavaScript腳本
-      if (includeJsScript && jsFile) {
-        if (!jsFile.startsWith('http') && !jsFile.startsWith('//')) {
-          htmlParts.push('  <!-- 注意: 以下腳本文件在預覽中可能不存在 -->');
-          htmlParts.push('  <script src="' + jsFile + '"></script>');
-          } else {
-          htmlParts.push('  <script src="' + jsFile + '"></script>');
-        }
       }
       
       htmlParts.push('</body>');
       htmlParts.push('</html>');
-    }
     
-    // 使用换行符连接所有部分
-    const htmlOutput = htmlParts.join('\n');
-    document.getElementById('output').value = htmlOutput;
+    // 更新輸出
+    const output = htmlParts.join('\n');
+    document.getElementById('output').value = output;
     
-    // 更新预览
+    // 更新預覽
     updatePreview();
   }
   
@@ -1624,198 +693,17 @@ document.addEventListener('DOMContentLoaded', function() {
    * 更新預覽
    */
   function updatePreview() {
+    const output = document.getElementById('output').value;
     const previewFrame = document.getElementById('previewFrame');
-    const htmlContent = document.getElementById('output').value;
     
-    if (previewFrame && htmlContent) {
-      try {
-        // 刪除之前的iframe內容，避免重複加載
-        const frameWindow = previewFrame.contentWindow;
-        if (frameWindow) {
-          try {
-            frameWindow.document.open();
-            frameWindow.document.write('');
-            frameWindow.document.close();
-          } catch (e) {
-            console.log('清除iframe內容失敗: ' + e.message);
-          }
-        }
-        
-        // 創建一個blob URL來代替直接寫入iframe內容
-        // 這樣可以確保正確的MIME類型
-        const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
-        const blobURL = URL.createObjectURL(blob);
-        
-        // 使用blob URL加載預覽
-        previewFrame.src = blobURL;
-        
-        // 當iframe加載完成後釋放blob URL
-        previewFrame.onload = function() {
-          URL.revokeObjectURL(blobURL);
-          
-          // 處理iframe內部的資源加載錯誤
-          try {
-            const frameDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
-            
-            // 應用自定義CSS
-            try {
-              if (document.getElementById('cssEditor')) {
-                let customCss = document.getElementById('cssEditor').value;
-                if (customCss && customCss.trim() !== '') {
-                  let styleElement = frameDoc.getElementById('customCssStyle');
-                  if (!styleElement) {
-                    styleElement = frameDoc.createElement('style');
-                    styleElement.id = 'customCssStyle';
-                    frameDoc.head.appendChild(styleElement);
-                  }
-                  styleElement.textContent = customCss;
-                }
-              }
-            } catch(cssError) {
-              console.warn('無法應用自定義CSS: ', cssError);
-            }
-            
-            // 應用自定義JS
-            try {
-              if (document.getElementById('jsEditor')) {
-                let customJs = document.getElementById('jsEditor').value;
-                if (customJs && customJs.trim() !== '' && customJs !== '// 在此編輯JavaScript代碼...') {
-                  // 檢查依賴項
-                  const dependencies = document.getElementById('jsDependencies');
-                  if (dependencies && dependencies.textContent.includes('jquery') && 
-                      !frameDoc.querySelector('script[src*="jquery"]')) {
-                    const jqueryScript = frameDoc.createElement('script');
-                    jqueryScript.src = 'https://code.jquery.com/jquery-3.7.1.min.js';
-                    frameDoc.head.appendChild(jqueryScript);
-                    
-                    // 當jquery加載完成後再加載自定義JS
-                    jqueryScript.onload = function() {
-                      const scriptElement = frameDoc.createElement('script');
-                      scriptElement.id = 'customJsScript';
-                      scriptElement.textContent = customJs;
-                      frameDoc.body.appendChild(scriptElement);
-                    };
-                  } else {
-                    const scriptElement = frameDoc.createElement('script');
-                    scriptElement.id = 'customJsScript';
-                    scriptElement.textContent = customJs;
-                    frameDoc.body.appendChild(scriptElement);
-                  }
-                }
-              }
-            } catch(jsError) {
-              console.warn('無法應用自定義JS: ', jsError);
-            }
-            
-            // 確保iframe內的表單和交互元素正常工作
-            const forms = frameDoc.querySelectorAll('form');
-            forms.forEach(form => {
-              form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                alert('在預覽模式中表單提交已被禁用');
-              });
-            });
-            
-            // 添加交互性提示
-            const interactiveElements = frameDoc.querySelectorAll('a, button, input[type="submit"]');
-            interactiveElements.forEach(el => {
-              if (el.tagName.toLowerCase() === 'a') {
-                el.addEventListener('click', function(e) {
-                  e.preventDefault();
-                  alert('在預覽模式中連結導航已被禁用');
-                });
-              } else if (el.type !== 'text' && el.type !== 'email' && el.type !== 'textarea') {
-                el.addEventListener('click', function(e) {
-                  if (e.target.type === 'submit') {
-                    e.preventDefault();
-                  }
-                });
-              }
-            });
-            
-            // 在iframe內部添加錯誤處理
-            const errorHandler = frameDoc.createElement('script');
-            errorHandler.textContent = `
-              // 攔截控制台錯誤
-              window.addEventListener('error', function(event) {
-                // 阻止404錯誤顯示在控制台
-                if (event.filename && (event.filename.endsWith('.css') || event.filename.endsWith('.js'))) {
-                  event.preventDefault();
-                  return false;
-                }
-              }, true);
-            `;
-            frameDoc.head.appendChild(errorHandler);
-            
-            // 增強表單展示
-            if (frameDoc.querySelector('form')) {
-              const formStyle = frameDoc.createElement('style');
-              formStyle.textContent = `
-                form {
-                  max-width: 500px;
-                  margin: 0 auto 20px;
-                  padding: 20px;
-                  border: 1px solid #ddd;
-                  border-radius: 8px;
-                  background-color: #f9f9f9;
-                  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-                }
-                .form-group {
-                  margin-bottom: 15px;
-                }
-                form label {
-                  display: block;
-                  margin-bottom: 8px;
-                  font-weight: bold;
-                  color: #333;
-                }
-                form input, form textarea, form select {
-                  width: 100%;
-                  padding: 10px;
-                  border: 1px solid #ddd;
-                  border-radius: 4px;
-                  font-size: 16px;
-                  transition: border-color 0.3s;
-                }
-                form input:focus, form textarea:focus, form select:focus {
-                  border-color: #0366d6;
-                  outline: none;
-                  box-shadow: 0 0 5px rgba(3, 102, 214, 0.3);
-                }
-                form button {
-                  background-color: #0366d6;
-                  color: white;
-                  border: none;
-                  padding: 12px 20px;
-                  border-radius: 4px;
-                  cursor: pointer;
-                  font-size: 16px;
-                  font-weight: bold;
-                  transition: background-color 0.3s;
-                }
-                form button:hover {
-                  background-color: #0056b3;
-                }
-              `;
-              frameDoc.head.appendChild(formStyle);
-            }
-          } catch (e) {
-            console.log('無法添加iframe錯誤處理或樣式: ' + e.message);
-          }
-        };
-      } catch (e) {
-        console.error('預覽更新失敗: ' + e.message);
-        
-        // 回退到舊方法
-        try {
-          const preview = previewFrame.contentDocument || previewFrame.contentWindow.document;
-          preview.open();
-          preview.write(htmlContent);
-          preview.close();
-        } catch (e2) {
-          console.error('預覽回退方法也失敗: ' + e2.message);
-        }
-      }
+    if (previewFrame) {
+      const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+      doc.open();
+      doc.write(output);
+      doc.close();
+      
+      // 調整預覽框架大小
+      previewFrame.style.height = doc.body.scrollHeight + 'px';
     }
   }
   
@@ -2586,16 +1474,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 元素庫定義
     const elements = [
-      { type: 'header', name: '標題區塊', icon: '📝' },
-      { type: 'paragraph', name: '段落文字', icon: '📄' },
-      { type: 'image', name: '圖片', icon: '🖼️' },
-      { type: 'button', name: '按鈕', icon: '🔘' },
-      { type: 'form', name: '表單', icon: '📋' },
-      { type: 'section', name: '區塊', icon: '📦' },
-      { type: 'divider', name: '分隔線', icon: '➖' },
-      { type: 'list', name: '列表', icon: '📋' },
-      { type: 'quote', name: '引用區塊', icon: '💬' },
-      { type: 'card', name: '卡片', icon: '🗂️' }
+      { type: 'header', name: '標題區塊', icon: '📝', defaultContent: '標題文字' },
+      { type: 'paragraph', name: '段落文字', icon: '📄', defaultContent: '段落內容' },
+      { type: 'image', name: '圖片', icon: '🖼️', defaultContent: 'https://via.placeholder.com/400x300' },
+      { type: 'button', name: '按鈕', icon: '🔘', defaultContent: '按鈕文字' },
+      { type: 'form', name: '表單', icon: '📋', defaultContent: '' },
+      { type: 'section', name: '區塊', icon: '📦', defaultContent: '' },
+      { type: 'divider', name: '分隔線', icon: '➖', defaultContent: '' },
+      { type: 'list', name: '列表', icon: '📋', defaultContent: '' },
+      { type: 'quote', name: '引用區塊', icon: '💬', defaultContent: '引用內容' },
+      { type: 'card', name: '卡片', icon: '🗂️', defaultContent: '' }
     ];
     
     // 創建元素庫項目
@@ -2604,9 +1492,10 @@ document.addEventListener('DOMContentLoaded', function() {
       item.className = 'element-item';
       item.draggable = true;
       item.dataset.elementType = element.type;
+      item.dataset.defaultContent = element.defaultContent;
       item.innerHTML = `
-        <div style="font-size: 24px;">${element.icon}</div>
-        <span>${element.name}</span>
+        <div class="element-icon">${element.icon}</div>
+        <span class="element-name">${element.name}</span>
       `;
       
       // 綁定拖拽事件
@@ -2618,18 +1507,37 @@ document.addEventListener('DOMContentLoaded', function() {
     // 設置畫布拖放區域
     pageCanvas.addEventListener('dragover', handleDragOver);
     pageCanvas.addEventListener('drop', handleDrop);
+    pageCanvas.addEventListener('dragleave', handleDragLeave);
     
     // 拖拽開始處理
     function handleDragStart(e) {
-      e.dataTransfer.setData('text/plain', e.target.dataset.elementType);
+      const elementType = e.target.dataset.elementType;
+      const defaultContent = e.target.dataset.defaultContent;
+      
+      e.dataTransfer.setData('text/plain', JSON.stringify({
+        type: elementType,
+        content: defaultContent
+      }));
       e.dataTransfer.effectAllowed = 'copy';
+      
+      // 添加拖拽時的視覺反饋
+      e.target.classList.add('dragging');
     }
     
     // 拖拽經過處理
     function handleDragOver(e) {
       e.preventDefault();
       e.dataTransfer.dropEffect = 'copy';
+      pageCanvas.classList.add('drag-over');
     }
+    
+    // 拖拽離開處理
+    pageCanvas.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      if (e.target === pageCanvas) {
+        pageCanvas.classList.remove('drag-over');
+      }
+    });
     
     // 放置處理
     function handleDrop(e) {
@@ -2639,20 +1547,33 @@ document.addEventListener('DOMContentLoaded', function() {
       // 根據元素類型創建對應的DOM元素
       const element = createElementByType(elementType);
       
-      // 計算放置位置
+      // 計算放置位置（相對於畫布的左上角）
       const rect = pageCanvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       
+      // 確保元素不會超出畫布邊界
+      const maxX = rect.width - element.offsetWidth;
+      const maxY = rect.height - element.offsetHeight;
+      
       element.style.position = 'absolute';
-      element.style.left = x + 'px';
-      element.style.top = y + 'px';
+      element.style.left = Math.min(Math.max(0, x), maxX) + 'px';
+      element.style.top = Math.min(Math.max(0, y), maxY) + 'px';
       
       // 添加到畫布
       pageCanvas.appendChild(element);
       
-      // 選中元素顯示屬性面板
+      // 選中元素並顯示屬性面板
       selectElement(element);
+      
+      // 添加拖動時的視覺反饋
+      pageCanvas.classList.remove('drag-over');
+      
+      // 觸發自定義事件，通知元素已添加
+      const event = new CustomEvent('elementAdded', {
+        detail: { element, type: elementType }
+      });
+      pageCanvas.dispatchEvent(event);
     }
     
     // 根據類型創建元素

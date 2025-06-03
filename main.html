@@ -5,33 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>HTML 快速模板產生器 By Willyyayaya</title>
   <link rel="stylesheet" href="style.css">
+  <!-- 新增 Font Awesome 圖示 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <!-- 引用外部JavaScript文件 -->
   <script src="template_generator.js" defer></script>
 </head>
 <body>
 
 <div class="header">
-<h1>HTML 快速模板產生器</h1>
+  <h1><i class="fas fa-code"></i> HTML 快速模板產生器</h1>
   <div class="theme-switch">
-    <span>🌞</span>
+    <span><i class="fas fa-sun"></i></span>
     <label class="switch">
       <input type="checkbox" id="themeToggle">
       <span class="slider"></span>
     </label>
-    <span>🌙</span>
+    <span><i class="fas fa-moon"></i></span>
   </div>
 </div>
 
 <div class="container">
   <div class="left-panel">
     <div class="tabs">
-      <div class="tab active" data-tab="basic">基本設置</div>
-      <div class="tab" data-tab="advanced">進階設置</div>
-      <div class="tab" data-tab="templates">模板選擇</div>
-      <div class="tab" data-tab="features">功能增強</div>
-      <div class="tab" data-tab="css">CSS模板</div>
-      <div class="tab" data-tab="js">JS模板</div>
-      <div class="tab" data-tab="layout">客製化排版</div>
+      <div class="tab active" data-tab="basic" data-tooltip="基本設置">
+        <i class="fas fa-cog"></i> 基本
+      </div>
+      <div class="tab" data-tab="advanced" data-tooltip="進階設置">
+        <i class="fas fa-sliders"></i> 進階
+      </div>
+      <div class="tab" data-tab="templates" data-tooltip="模板選擇">
+        <i class="fas fa-palette"></i> 模板
+      </div>
+      <div class="tab" data-tab="features" data-tooltip="功能增強">
+        <i class="fas fa-magic"></i> 功能
+      </div>
+      <div class="tab" data-tab="css" data-tooltip="CSS模板">
+        <i class="fas fa-paint-brush"></i> CSS
+      </div>
+      <div class="tab" data-tab="js" data-tooltip="JS模板">
+        <i class="fas fa-code"></i> JS
+      </div>
+      <div class="tab" data-tab="layout" data-tooltip="客製化排版">
+        <i class="fas fa-th-large"></i> 排版
+      </div>
     </div>
     
     <div id="basic" class="tab-content active">
@@ -465,16 +481,26 @@
     </div>
     
     <div class="btn-group">
-      <button id="generateBtn">產生模板</button>
-      <button id="copyBtn">複製到剪貼簿</button>
-      <button id="downloadBtn">下載 HTML 檔案</button>
+      <button id="generateBtn" class="btn-primary" data-tooltip="產生 HTML 模板">
+        <i class="fas fa-magic"></i> 產生模板
+      </button>
+      <button id="copyBtn" class="btn-secondary" data-tooltip="複製到剪貼簿">
+        <i class="fas fa-copy"></i> 複製
+      </button>
+      <button id="downloadBtn" class="btn-secondary" data-tooltip="下載 HTML 檔案">
+        <i class="fas fa-download"></i> 下載
+      </button>
     </div>
   </div>
 
   <div class="right-panel">
     <div class="tabs">
-      <div class="tab active" data-tab="code">代碼</div>
-      <div class="tab" data-tab="preview">預覽</div>
+      <div class="tab active" data-tab="code" data-tooltip="查看代碼">
+        <i class="fas fa-code"></i> 代碼
+      </div>
+      <div class="tab" data-tab="preview" data-tooltip="預覽效果">
+        <i class="fas fa-eye"></i> 預覽
+      </div>
     </div>
     
     <div id="code" class="tab-content active">
